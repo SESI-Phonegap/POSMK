@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="3"
+            android:maxLines="3"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Producto"
+            android:id="@+id/dialog_add_item"
+            android:layout_marginTop="20dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_add_item"
+        android:id="@+id/dialog_add_cantidad"
+        android:textStyle="normal|bold"
+
+        android:textSize="20sp"
+        android:text="Disponibles: 5"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_add_cantidad"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/dialog_add_spinner" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_add_btn_cancelar"
+        android:text="@string/btn_cancelar"
+        android:layout_below="@+id/dialog_add_spinner"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginTop="19dp"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_add_btn_agregar"
+        android:text="@string/Agregar"
+        android:layout_alignBaseline="@+id/dialog_add_btn_cancelar"
+        android:layout_alignBottom="@+id/dialog_add_btn_cancelar"
+        android:layout_toLeftOf="@+id/dialog_add_btn_cancelar"
+        android:layout_toStartOf="@+id/dialog_add_btn_cancelar"
+        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+
+
+</RelativeLayout>

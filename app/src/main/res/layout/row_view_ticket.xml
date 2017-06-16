@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="79dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+
+
+        <!-- quick and dirty divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_gravity="bottom"
+
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/importe"
+            android:text="$500.00"
+            android:textStyle="normal|bold"
+            android:layout_alignBaseline="@+id/precio"
+            android:layout_alignBottom="@+id/precio"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="17dp"
+            android:layout_marginEnd="17dp" />
+
+        <TextView
+            android:id="@+id/item_inventario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/article_subheading"
+            android:lines="2"
+            android:maxLines="2"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:text="Producto"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cant_stock"
+            android:text="10"
+            android:textStyle="normal|bold"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_below="@+id/item_inventario"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="11dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/precio"
+            android:text="$250.00"
+            android:textStyle="normal|bold"
+            android:layout_alignBaseline="@+id/cant_stock"
+            android:layout_alignBottom="@+id/cant_stock"
+            android:layout_toLeftOf="@+id/importe"
+            android:layout_toStartOf="@+id/importe"
+            android:layout_marginRight="110dp"
+            android:layout_marginEnd="110dp" />
+
+        <Button
+            android:id="@+id/undo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/Cancelar"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:layout_gravity="end|center_vertical"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_alignBottom="@+id/importe"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>

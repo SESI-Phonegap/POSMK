@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/list_icon_inventario"
+            android:layout_margin="7dp"
+            android:layout_width="@dimen/avator_size"
+            android:layout_height="@dimen/avator_size"
+            android:layout_alignParentLeft="true"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/a_avator" />
+
+
+        <!-- quick and dirty divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_gravity="bottom"
+
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/item_inventario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/article_subheading"
+            android:lines="2"
+            android:maxLines="2"
+            android:textAppearance="?attr/textAppearanceListItem"
+            tools:text="Valeria Ahumada Oliver"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/list_icon_inventario"
+            android:layout_toEndOf="@+id/list_icon_inventario" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>

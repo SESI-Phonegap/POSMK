@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_venta"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="chris.sesi.com.minegociomk.Venta"
+    tools:showIn="@layout/activity_venta">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Seleccionar_cliente"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/venta_tv_cliente"/>
+
+        <Button
+            android:id="@+id/btn_ventaActual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Ventaactual"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+
+        <Button
+            android:id="@+id/btn_cobrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cobrar   $0.00"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:textStyle="normal|bold"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/venta_buscar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/ic_menu_search"
+        android:hint="@string/Buscar"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_ventaInventario"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+
+</LinearLayout>
