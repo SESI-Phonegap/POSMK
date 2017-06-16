@@ -33,7 +33,9 @@
     <dimen name="standard_155">155dp</dimen>
     <dimen name="standard_145">145dp</dimen>
     <dimen name="standard_190">190dp</dimen>
-
     <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="sizeTextEditText">17sp</dimen>
+    <dimen name="marginStarEndGral">16dp</dimen>
 
 </resources>

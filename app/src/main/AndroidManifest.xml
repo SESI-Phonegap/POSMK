@@ -10,7 +10,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +23,9 @@
         <activity
             android:name=".Registro"
             android:label="@string/title_activity_registro"
-            android:parentActivityName=".MenuPrincipal">
+            android:parentActivityName=".MenuPrincipal"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -99,7 +104,8 @@
             android:name=".Venta"
             android:label="@string/title_activity_venta"
             android:theme="@style/AppTheme" />
-        <activity android:name=".FormNuevaConsultora"></activity>
+        <activity android:name=".FormNuevaConsultora" />
+
     </application>
 
 </manifest>

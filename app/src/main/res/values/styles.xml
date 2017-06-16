@@ -36,13 +36,13 @@
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textColorHint">@color/rosaclaro</item>
-        <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/custom_edit_text_form</item>
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
         <item name="android:maxLines">1</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">@dimen/sizeTextEditText</item>
     </style>
+
     <style name="Button" parent="Widget.AppCompat.Button">
         <item name="android:textAllCaps">false</item>
     </style>

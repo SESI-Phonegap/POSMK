@@ -8,6 +8,11 @@
     <string name="iniciaSesion">Iniciar Sesión</string>
     <string name="descripLogo">Logo</string>
 
+    <!-- Registro -->
+    <string name="userMkOpcional">Usuario Mary Kay (Opcional)</string>
+    <string name="passMkOpcional">Contraseña Mary Kay (Opcional)</string>
+    <string name="nivelMk">Nivel (Consultora)</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -37,7 +42,7 @@
     <string name="PrecioCompra">Precio de compra</string>
     <string name="PrecioVenta">Precio de venta</string>
     <string name="Agregar">Agregar</string>
-    <string name="camposVacios">!No puedes dejar campos vacios¡</string>
+    <string name="camposVacios">Asegurate de haber llenado los campos obligatorios</string>
     <string name="action_search">Buscar...</string>
     <string name="Ventaactual">Venta Actual</string>
     <string name="Buscar">Buscar...</string>
@@ -52,6 +57,8 @@
     <string name="Ocupacion">Ocupacion</string>
     <string name="Guardar">Guardar</string>
     <string name="Error_Sesion">!Error¡ Usuario o contraseña incorrectos</string>
+
+    <!-- Activity Titles -->
     <string name="title_activity_client_list">Clientes</string>
     <string name="title_activity_edit__client">Actualiza Cliente</string>
     <string name="title_activity_catalogo">Catalogo</string>
@@ -60,6 +67,7 @@
     <string name="title_activity_menu_principal">Menu Principal</string>
     <string name="title_activity_registro">Registrate</string>
     <string name="title_activity_venta">Venta</string>
+    <string name="title_activity_registrate">Registrate</string>
 
 
 </resources>

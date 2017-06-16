@@ -1,6 +1,7 @@
 package chris.sesi.com.utils;
 
 import android.app.Application;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -59,6 +60,24 @@ public class Util {
             Snackbar.make(view, context.getResources().getString(R.string.Error_Sesion) + "User: " + user + " Pass: " + pass, Snackbar.LENGTH_LONG).show();
 
         }
+    }
+
+    public static void altaUsuario(Application context, String email, String nombre, String contraseña,
+                            String userMk, String passMk, String nivelMk ){
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase sqLiteDatabase = adminSQLiteOpenHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ContractSql.User.COLUMN_NAME_PK_ID, email);
+        values.put(ContractSql.User.COLUMN_NAME_NOMBRE, nombre);
+        values.put(ContractSql.User.COLUMN_NAME_NIVELMK, nivelMk);
+        values.put(ContractSql.User.COLUMN_NAME_PASS_USER, contraseña);
+        values.put(ContractSql.User.COLUMN_NAME_USER_MK, userMk);
+        values.put(ContractSql.User.COLUMN_NAME_PASS_MK, passMk);
+
+        sqLiteDatabase.insert(ContractSql.User.TABLE_NAME, null, values);
+        sqLiteDatabase.close();
 
 
     }

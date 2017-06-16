@@ -1,9 +1,6 @@
 package chris.sesi.com.minegociomk;
 
-import android.content.ContentValues;
-
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,9 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import chris.sesi.com.database.AdminSQLiteOpenHelper;
-import chris.sesi.com.database.ContractSql;
+import chris.sesi.com.utils.Util;
 
 public class Registro extends AppCompatActivity {
 
@@ -23,9 +18,6 @@ public class Registro extends AppCompatActivity {
     private EditText userMk;
     private EditText passMk;
     private EditText nivelMk;
-    private Button btn_registro;
-    private String mail;
-    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,54 +35,33 @@ public class Registro extends AppCompatActivity {
         passMk = (EditText) findViewById(R.id.r_passMK);
         nivelMk = (EditText) findViewById(R.id.r_nivel);
 
-        btn_registro = (Button) findViewById(R.id.r_btnOk);
+        Button btn_registro = (Button) findViewById(R.id.r_btnOk);
 
         btn_registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(idEmail.getText().toString().equals("") ||
-                        nombre.getText().toString().equals("") ||
-                        pass.getText().toString().equals("") ||
-                        userMk.getText().toString().equals("") ||
-                        passMk.getText().toString().equals("") ||
-                        nivelMk.getText().toString().equals("")){
-
-                    Snackbar.make(v,getResources().getString(R.string.camposVacios),Snackbar.LENGTH_LONG).show();
-
-                }else{
-                altaUsuario();
-                Snackbar.make(v,getResources().getString(R.string.RegistroExitoso),Snackbar.LENGTH_LONG).show();
-                Intent intent = new Intent(v.getContext(),MainActivity.class);
-                startActivityForResult(intent,0);
-
-                }
+                alta(v);
             }
         });
 
     }
 
-    public void altaUsuario(){
-        mail = idEmail.getText().toString();
-        String nomb = nombre.getText().toString();
-        password = pass.getText().toString();
-        String usuarioMk = userMk.getText().toString();
-        String passwordMk = passMk.getText().toString();
-        String nivel = nivelMk.getText().toString();
+    public void  alta(View v){
+        if(idEmail.getText().toString().equals("") ||
+                nombre.getText().toString().equals("") ||
+                pass.getText().toString().equals("") ||
+                nivelMk.getText().toString().equals("")){
 
-        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(this);
-        SQLiteDatabase sqLiteDatabase = adminSQLiteOpenHelper.getWritableDatabase();
+            Snackbar.make(v,getResources().getString(R.string.camposVacios),Snackbar.LENGTH_LONG).show();
 
-        ContentValues values = new ContentValues();
-        values.put(ContractSql.User.COLUMN_NAME_PK_ID, mail);
-        values.put(ContractSql.User.COLUMN_NAME_NOMBRE, nomb);
-        values.put(ContractSql.User.COLUMN_NAME_NIVELMK, nivel);
-        values.put(ContractSql.User.COLUMN_NAME_PASS_USER, password);
-        values.put(ContractSql.User.COLUMN_NAME_USER_MK, usuarioMk);
-        values.put(ContractSql.User.COLUMN_NAME_PASS_MK, passwordMk);
+        }else{
+            Util.altaUsuario(getApplication(),idEmail.getText().toString(),nombre.getText().toString(),
+                    pass.getText().toString(),userMk.getText().toString(),passMk.getText().toString(),
+                    nivelMk.getText().toString());
+            Snackbar.make(v,getResources().getString(R.string.RegistroExitoso),Snackbar.LENGTH_LONG).show();
+            Intent intent = new Intent(v.getContext(),MainActivity.class);
+            startActivityForResult(intent,0);
 
-        sqLiteDatabase.insert(ContractSql.User.TABLE_NAME, null, values);
-        sqLiteDatabase.close();
-
-
+        }
     }
 }
