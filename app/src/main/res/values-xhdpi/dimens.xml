@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sizeHeightEditTex">40dp</dimen>
+    <dimen name="sizeHeighButton">55dp</dimen>
+    <dimen name="sizeTextRegistrarse">18sp</dimen>
+</resources>

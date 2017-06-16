@@ -1,10 +1,13 @@
 <resources>
+
+    <!-- Login -->
     <string name="app_name">Mi Negocio MK</string>
     <string name="usuario">e-mail</string>
     <string name="pass">Contaseña</string>
-    <string name="registrate">Regístrate</string>
+    <string name="registrate"><u>Regístrate</u></string>
     <string name="iniciaSesion">Iniciar Sesión</string>
-    <string name="o">------ o ------</string>
+    <string name="descripLogo">Logo</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

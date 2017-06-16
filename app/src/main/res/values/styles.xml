@@ -31,8 +31,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="EditTextFormStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_height">@dimen/sizeHeightEditTex</item>
         <item name="android:layout_marginStart">10dp</item>
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:textColor">@color/colorPrimary</item>
@@ -43,6 +42,9 @@
         <item name="android:paddingEnd">10dp</item>
         <item name="android:maxLines">1</item>
         <item name="android:textSize">17sp</item>
+    </style>
+    <style name="Button" parent="Widget.AppCompat.Button">
+        <item name="android:textAllCaps">false</item>
     </style>
 
 </resources>
