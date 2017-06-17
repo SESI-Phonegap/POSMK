@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.Snackbar;
 import android.view.View;
-
+import java.util.List;
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
 import chris.sesi.com.minegociomk.MenuPrincipal;
@@ -79,6 +79,52 @@ public class Util {
         sqLiteDatabase.insert(ContractSql.User.TABLE_NAME, null, values);
         sqLiteDatabase.close();
 
+
+    }
+
+    public static void consultaCatalogo(Application context,List<String> items, List<String> itemsid){
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        String[] projection = {ContractSql.Producto.COLUMN_NAME_NOMBRE,
+                ContractSql.Producto.COLUMN_NAME_PK_ID};
+
+        //Filtro del query WHERE
+        String selection = "";
+        String[] selectionArgs = {};
+
+        Cursor cursor = db.query(
+                ContractSql.Producto.TABLE_NAME,               //Nombre de la tabla
+                projection,                                 //Campos requeridos de la tabla
+                selection,                                 //Condicion Where
+                selectionArgs,                             // Argumentos de la condicion
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                items.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_NOMBRE)));
+                itemsid.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_PK_ID)));
+
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+    }
+
+    public static void insertProduct(Application context,String product){
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ContractSql.Producto.COLUMN_NAME_NOMBRE,product);
+        values.put(ContractSql.Producto.COLUMN_NAME_DESCRIPCION, "");
+        values.put(ContractSql.Producto.COLUMN_NAME_VENDIDOS,0);
+
+        db.insert(ContractSql.Producto.TABLE_NAME,null,values);
+        db.close();
 
     }
 }

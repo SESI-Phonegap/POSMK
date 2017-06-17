@@ -1,11 +1,7 @@
 package chris.sesi.com.minegociomk;
 
-import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,25 +14,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import chris.sesi.com.database.AdminSQLiteOpenHelper;
-import chris.sesi.com.database.ContractSql;
+import chris.sesi.com.utils.Util;
 
 public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -55,9 +43,16 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_catalogo);
         items = new ArrayList<>();
         itemsID = new ArrayList<>();
-        consultaCatalogo(items,itemsID);
+        Util.consultaCatalogo(getApplication(),items,itemsID);
         setUpRecyclerView();
-
+       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TestAdapterCatalogo.createNewProductDialog();
+            }
+        });
+*/
 
 
     }
@@ -72,7 +67,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void setUpRecyclerView() {
+    public void setUpRecyclerView() {
         testAdapter = new TestAdapter(items,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(testAdapter);
@@ -101,9 +96,6 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
         testAdapter.notifyDataSetChanged();
         return true;
     }
-
-
-
 
 
 
@@ -186,7 +178,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
                         Snackbar.make(v,getResources().getString(R.string.Campovacio),Snackbar.LENGTH_LONG).show();
 
                     }else {
-                        insertProduct(product);
+                        Util.insertProduct(getApplication(),product);
                         items.add(product);
                         setUpRecyclerView();
                         dialog.cancel();
@@ -227,7 +219,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
         }
     }
 
-    public void consultaCatalogo(List<String> items, List<String> itemsid){
+/*    public void consultaCatalogo(List<String> items, List<String> itemsid){
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(this);
         SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
 
@@ -257,9 +249,9 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
         }
         cursor.close();
         db.close();
-    }
+    }*/
 
-    public void insertProduct(String product){
+ /*   public void insertProduct(String product){
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(this);
         SQLiteDatabase db = adminSQLiteOpenHelper.getWritableDatabase();
 
@@ -272,7 +264,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
         db.close();
 
 
-    }
+    }*/
 
 
 
