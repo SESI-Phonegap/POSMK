@@ -2,16 +2,10 @@ package chris.sesi.com.minegociomk;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,16 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
-
-import chris.sesi.com.database.AdminSQLiteOpenHelper;
-import chris.sesi.com.database.ContractSql;
+import chris.sesi.com.utils.UtilsDml;
 
 public class Inventario extends AppCompatActivity implements SearchView.OnQueryTextListener{
     RecyclerView recyclerView;
@@ -49,7 +39,10 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_inventario);
         items = new ArrayList<>();
         itemsID = new ArrayList<>();
-        consultaInventario(items,itemsID);
+
+        if (!UtilsDml.consultaInventario(getApplication(),items,itemsID)){
+            Toast.makeText(this,getString(R.string.sinInventario),Toast.LENGTH_LONG).show();
+        }
         setUpRecyclerView();
 
 
@@ -94,7 +87,7 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
         return true;
     }
 
-    class TestAdapter extends RecyclerView.Adapter {
+    private class TestAdapter extends RecyclerView.Adapter {
         List<String> items;
         Context mContext;
 
@@ -155,7 +148,7 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
 
     }
 
-    static class TestViewHolder extends RecyclerView.ViewHolder {
+    private static class TestViewHolder extends RecyclerView.ViewHolder {
 
         ImageView icon;
         TextView item;
@@ -168,54 +161,6 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
             mView = itemView;
         }
     }
-
-    public void consultaInventario(List<String> items, List<String> itemId){
-        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(this);
-        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
-
-        String[] projection = {ContractSql.Producto.TABLE_NAME+"."+ContractSql.Producto.COLUMN_NAME_NOMBRE,
-                               ContractSql.Inventario.TABLE_NAME+"."+ContractSql.Inventario.COLUMN_NAME_FK_ID_PRODUCTO,
-                               ContractSql.Inventario.TABLE_NAME+"."+ContractSql.Inventario.COLUMN_NAME_STOCK};
-
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(ContractSql.Producto.TABLE_NAME + " INNER JOIN " + ContractSql.Inventario.TABLE_NAME + " ON " +
-                ContractSql.Producto.TABLE_NAME+"."+ ContractSql.Producto.COLUMN_NAME_PK_ID + " = " + ContractSql.Inventario.TABLE_NAME+"."+ ContractSql.Inventario.COLUMN_NAME_FK_ID_PRODUCTO );
-
-
-
-        //Filtro del query WHERE
-         // String selection =  ContractSql.Producto.TABLE_NAME+"."+ ContractSql.Producto.COLUMN_NAME_PK_ID + " =? ";
-       //   String[] selectionArgs = {ContractSql.Inventario.TABLE_NAME+"."+ ContractSql.Inventario.COLUMN_NAME_FK_ID_PRODUCTO};
-          String orderBy = ContractSql.Producto.TABLE_NAME+"."+ ContractSql.Producto.COLUMN_NAME_NOMBRE + " ASC";
-          Cursor cursor = queryBuilder.query(
-                  db,
-                  projection,
-                  null,
-                  null,
-                  null,
-                  null,
-                  orderBy);
-
-   /*     Cursor cursor = db.query(
-                ContractSql.Producto.TABLE_NAME,               //Nombre de la tabla
-                projection,                                 //Campos requeridos de la tabla
-                selection,                                 //Condicion Where
-                selectionArgs,                             // Argumentos de la condicion
-                null,
-                null,
-                null);
-*/
-        if (cursor.moveToFirst()) {
-            //Recorremos el cursor hasta que no haya más registros
-            do {
-                items.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_NOMBRE)));
-                itemId.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Inventario.COLUMN_NAME_FK_ID_PRODUCTO)));
-            }while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-    }
-
 
 
 }

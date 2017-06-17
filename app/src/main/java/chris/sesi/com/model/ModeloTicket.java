@@ -1,14 +1,11 @@
 package chris.sesi.com.model;
 
-/**
- * Created by Chris on 05/01/2017.
- */
 
 public class ModeloTicket {
-    public String id_producto;
-    public String producto;
-    public String cantidad;
-    public String precioUnitario;
+    private String id_producto;
+    private String producto;
+    private String cantidad;
+    private String precioUnitario;
     public String importe;
 
     public ModeloTicket(String id_producto,String producto,String cantidad, String precioUnitario, String importe){

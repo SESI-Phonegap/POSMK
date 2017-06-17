@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
-import chris.sesi.com.utils.Util;
+import chris.sesi.com.utils.UtilsDml;
 
 public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -43,7 +43,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_catalogo);
         items = new ArrayList<>();
         itemsID = new ArrayList<>();
-        Util.consultaCatalogo(getApplication(),items,itemsID);
+        UtilsDml.consultaCatalogo(getApplication(),items,itemsID);
         setUpRecyclerView();
        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +84,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
     public boolean onQueryTextChange(String newText) {
        newText = newText.toLowerCase();
         final List<String> filteredList = new ArrayList<>();
+      //  List<String>filteredIdItemList = new ArrayList<>();
         for(int i = 0; i < items.size(); i++){
             final String text = items.get(i).toLowerCase();
             if(text.contains(newText)){
@@ -110,7 +111,6 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
             mContext = context;
 
         }
-
 
 
 
@@ -178,8 +178,9 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
                         Snackbar.make(v,getResources().getString(R.string.Campovacio),Snackbar.LENGTH_LONG).show();
 
                     }else {
-                        Util.insertProduct(getApplication(),product);
+                        UtilsDml.insertProduct(getApplication(),product);
                         items.add(product);
+                        UtilsDml.consultaCatalogo(getApplication(),items,itemsID);
                         setUpRecyclerView();
                         dialog.cancel();
                     }

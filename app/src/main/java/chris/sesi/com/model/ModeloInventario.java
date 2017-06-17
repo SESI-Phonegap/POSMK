@@ -1,15 +1,12 @@
 package chris.sesi.com.model;
 
-/**
- * Created by Chris on 02/01/2017.
- */
 
 public class ModeloInventario {
 
-   public String id;
-   public String nombreProducto;
-   public String cantidad;
-   public String precio;
+   private String id;
+   private String nombreProducto;
+   private String cantidad;
+   private String precio;
 
    public ModeloInventario(String id,String nombre, String cant, String precio){
         this.id = id;

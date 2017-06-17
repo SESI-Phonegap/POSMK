@@ -1,11 +1,5 @@
 package chris.sesi.com.database;
 
-import java.security.PublicKey;
-
-/**
- * Created by Chris on 17/11/2016.
- */
-
 public final class ContractSql {
 
     private ContractSql(){}

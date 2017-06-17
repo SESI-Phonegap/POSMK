@@ -8,33 +8,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import chris.sesi.com.minegociomk.R;
-import chris.sesi.com.minegociomk.Venta;
-import chris.sesi.com.model.ModeloInventario;
 import chris.sesi.com.model.ModeloTicket;
 
-/**
- * Created by Chris on 12/01/2017.
- */
 
 public class TestAdapterTicket extends RecyclerView.Adapter {
     private static final int PENDING_REMOVAL_TIMEOUT = 3000; // 3sec
 
-    List<ModeloTicket> items;
-    Context mContext;
-    List<ModeloTicket> itemsPendingRemoval;
+    private List<ModeloTicket> items;
+    private Context mContext;
+    private List<ModeloTicket> itemsPendingRemoval;
 
-    boolean undoOn = true; // is undo on, you can turn it on from the toolbar menu
+    private boolean undoOn = true; // is undo on, you can turn it on from the toolbar menu
 
     private Handler handler = new Handler(); // hanlder for running delayed runnables
-    HashMap<ModeloTicket, Runnable> pendingRunnables = new HashMap<>(); // map of items to pending runnables, so we can cancel a removal if need be
+    private HashMap<ModeloTicket, Runnable> pendingRunnables = new HashMap<>(); // map of items to pending runnables, so we can cancel a removal if need be
 
 
     public TestAdapterTicket(List<ModeloTicket> item_list,Context context){
@@ -145,13 +138,7 @@ public class TestAdapterTicket extends RecyclerView.Adapter {
         return itemsPendingRemoval.contains(item);
     }
 
-
-
-
-
-
-
-    static class TestViewHolder extends RecyclerView.ViewHolder {
+    private static class TestViewHolder extends RecyclerView.ViewHolder {
 
 
         TextView item;

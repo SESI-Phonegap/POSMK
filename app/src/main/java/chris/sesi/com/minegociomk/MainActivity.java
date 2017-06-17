@@ -1,12 +1,13 @@
 package chris.sesi.com.minegociomk;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import chris.sesi.com.utils.Util;
+import chris.sesi.com.utils.UtilsDml;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +28,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String _user = usuario.getText().toString();
                 final String _pass = pass.getText().toString();
-                Util.iniciarSesion(getApplication(),v, _user, _pass);
+                if (UtilsDml.iniciarSesion(getApplication(),v, _user, _pass)){
+                    Intent intent = new Intent(getApplication(), MenuPrincipal.class);
+                    startActivity(intent);
+                }else {
+                    Snackbar.make(v, getResources().getString(R.string.Error_Sesion), Snackbar.LENGTH_LONG).show();
+
+                }
             }
 
 

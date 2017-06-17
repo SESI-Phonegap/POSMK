@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
@@ -20,7 +19,7 @@ import java.util.List;
 
 import chris.sesi.com.minegociomk.FormAgregarStock;
 import chris.sesi.com.minegociomk.R;
-import chris.sesi.com.utils.Util;
+import chris.sesi.com.utils.UtilsDml;
 
 /**
  * Created by QUALITY on 16/06/2017.
@@ -107,7 +106,7 @@ public class TestAdapterCatalogo extends RecyclerView.Adapter {
                     Snackbar.make(v,mContext.getResources().getString(R.string.Campovacio),Snackbar.LENGTH_LONG).show();
 
                 }else {
-                    Util.insertProduct(mContext,product);
+                    UtilsDml.insertProduct(mContext,product);
                     items.add(product);
                 //    setUpRecyclerView();
                     dialog.cancel();
@@ -129,19 +128,19 @@ public class TestAdapterCatalogo extends RecyclerView.Adapter {
 
     }
 
+    private static class TestViewHolder extends RecyclerView.ViewHolder {
 
-}
+        ImageView icon;
+        TextView item;
+        View mView;
 
-class TestViewHolder extends RecyclerView.ViewHolder {
-
-    ImageView icon;
-    TextView item;
-    View mView;
-
-    TestViewHolder(ViewGroup parent){
-        super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view_catalogo, parent, false));
-        icon = (ImageView) itemView.findViewById(R.id.list_icon_catalogo);
-        item = (TextView) itemView.findViewById(R.id.item_catalogo);
-        mView = itemView;
+        TestViewHolder(ViewGroup parent){
+            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view_catalogo, parent, false));
+            icon = (ImageView) itemView.findViewById(R.id.list_icon_catalogo);
+            item = (TextView) itemView.findViewById(R.id.item_catalogo);
+            mView = itemView;
+        }
     }
+
 }
+
