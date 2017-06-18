@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,8 +32,7 @@ import java.util.List;
 import chris.sesi.com.utils.Utils;
 import chris.sesi.com.utils.UtilsDml;
 
-public class ClientList extends AppCompatActivity implements SearchView.OnQueryTextListener {
-
+public class ConsultoraList extends AppCompatActivity implements SearchView.OnQueryTextListener{
     public RecyclerView recyclerView;
     private List<String> items;
     public static List<String> itemsID;
@@ -41,46 +41,47 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
     private final static String ORIGIN_ACTIVITY = "origin_activity";
     private final static String ACTUALIZAR = "actualizar";
     private final static String ALTA = "alta";
-    private final static String CLIENTES = "clientes";
-
+    private final static String CONSULTORAS = "consultoras";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client_list);
+        setContentView(R.layout.activity_consultora_list);
         init();
+
     }
 
-    public void init() {
+    public void init(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_clientes);
-        items = new ArrayList<>();
-        itemsID = new ArrayList<>();
-        item_tel = new ArrayList<>();
-        UtilsDml.consultaClientes(getApplication(),items, item_tel, itemsID);
-        setUpRecyclerView();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_nuevo_cliente);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ClientList.this, FormNuevoCliente.class);
+                Intent intent = new Intent(ConsultoraList.this, FormNuevaConsultora.class);
                 intent.putExtra(ORIGIN_ACTIVITY,ALTA);
                 startActivity(intent);
             }
         });
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_consultoras);
+        items = new ArrayList<>();
+        itemsID = new ArrayList<>();
+        item_tel = new ArrayList<>();
+        UtilsDml.consultaConsultoras(getApplication(),items,item_tel,itemsID);
+        setUpRecyclerView();
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-
-        final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-        searchView.setOnQueryTextListener(this);
-        return super.onCreateOptionsMenu(menu);
+    public void setUpRecyclerView() {
+        testAdapter = new TestAdapter(items, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(testAdapter);
+        recyclerView.setHasFixedSize(true);
+        ((TestAdapter) recyclerView.getAdapter()).setUndoOn(true);
+        Utils.setUpItemTouchHelperLlamar(getApplication(),recyclerView,CONSULTORAS);
+        Utils.setUpAnimationDecoratorHelperLlamar(getApplication(),recyclerView);
     }
 
     @Override
@@ -98,23 +99,22 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
                 filteredList.add(items.get(i));
             }
         }
-        recyclerView.setLayoutManager(new LinearLayoutManager(ClientList.this));
-        testAdapter = new TestAdapter(filteredList, ClientList.this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ConsultoraList.this));
+        testAdapter = new TestAdapter(filteredList, ConsultoraList.this);
         recyclerView.setAdapter(testAdapter);
         testAdapter.notifyDataSetChanged();
         return true;
     }
 
-    public void setUpRecyclerView() {
-        testAdapter = new TestAdapter(items, this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(testAdapter);
-        recyclerView.setHasFixedSize(true);
-        ((TestAdapter) recyclerView.getAdapter()).setUndoOn(true);
-        Utils.setUpItemTouchHelperLlamar(getApplication(),recyclerView,CLIENTES);
-        Utils.setUpAnimationDecoratorHelperLlamar(getApplication(),recyclerView);
-    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
 
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+        return super.onCreateOptionsMenu(menu);
+    }
 
 
     /**
@@ -175,7 +175,7 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
                     @Override
                     public void onClick(View v) {
                         Context context = v.getContext();
-                        Intent intent = new Intent(context, FormNuevoCliente.class);
+                        Intent intent = new Intent(context, FormNuevaConsultora.class);
                         intent.putExtra("ID", item_Id);
                         intent.putExtra(ORIGIN_ACTIVITY,ACTUALIZAR);
                         context.startActivity(intent);
@@ -191,7 +191,7 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
             return items.size();
         }
 
-        public void setUndoOn(boolean undoOn) {
+        private void setUndoOn(boolean undoOn) {
             this.undoOn = undoOn;
         }
 
@@ -204,10 +204,10 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
             final String itemTel = item_tel.get(position);
 
             try {
-                if (ActivityCompat.checkSelfPermission(ClientList.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(ConsultoraList.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     explicarUsoPermiso();
                     // Pedir permiso para realizar llamada
-                    ActivityCompat.requestPermissions(ClientList.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+                    ActivityCompat.requestPermissions(ConsultoraList.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
 
                 } else {
 
@@ -232,8 +232,8 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
 
 
             //Este IF es necesario para saber si el usuario ha marcado o no la casilla [] No volver a preguntar
-            if (ActivityCompat.shouldShowRequestPermissionRationale(ClientList.this, Manifest.permission.CALL_PHONE)) {
-                Toast.makeText(ClientList.this, "2.1 Explicamos razonadamente porque necesitamos el permiso", Toast.LENGTH_SHORT).show();
+            if (ActivityCompat.shouldShowRequestPermissionRationale(ConsultoraList.this, Manifest.permission.CALL_PHONE)) {
+                Toast.makeText(ConsultoraList.this, "2.1 Explicamos razonadamente porque necesitamos el permiso", Toast.LENGTH_SHORT).show();
                 //Explicarle al usuario porque necesitas el permiso (Opcional)
 
             }
@@ -251,7 +251,7 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
             }
         }
 
-       public boolean isPendingRemoval(int position) {
+        public boolean isPendingRemoval(int position) {
             String item = items.get(position);
             return itemsPendingRemoval.contains(item);
         }

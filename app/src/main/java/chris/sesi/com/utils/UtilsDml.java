@@ -200,6 +200,83 @@ public class UtilsDml {
         return bIsOk;
     }
 
+    public static void consultaConsultoras(Application context, List<String> items, List<String> itemTel, List<String> itemId){
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        //Columnas requeridas
+        String[] projection = {ContractSql.Consultoras.COLIMN_NAME_PK_ID,
+                ContractSql.Consultoras.COLIMN_NAME_NOMBRE,
+                ContractSql.Consultoras.COLIMN_NAME_TELEFONO};
+        //Filtro del query WHERE
+        String selection = "";
+        String[] selectionArgs = {};
+
+        Cursor cursor = db.query(
+                ContractSql.Consultoras.TABLE_NAME,               //Nombre de la tabla
+                projection,                                 //Campos requeridos de la tabla
+                selection,                                 //Condicion Where
+                selectionArgs,                             // Argumentos de la condicion
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                itemId.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_PK_ID)));
+                items.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NOMBRE)));
+                itemTel.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_TELEFONO)));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+    }
+
+    public static boolean ConsultoraDetail(Application context, String id, EditText nombre_consultora,
+                                       EditText telefono_consultora, EditText direccion_consultora, EditText nivel_consultora){
+
+        boolean bIsOk = false;
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        //Columnas requeridas
+        String[] projection = {ContractSql.Consultoras.COLIMN_NAME_PK_ID,
+                ContractSql.Consultoras.COLIMN_NAME_NOMBRE,
+                ContractSql.Consultoras.COLIMN_NAME_TELEFONO,
+                ContractSql.Consultoras.COLIMN_NAME_DIRECCION,
+                ContractSql.Consultoras.COLIMN_NAME_NIVEL};
+        //Filtro del query WHERE
+        String selection = ContractSql.Consultoras.COLIMN_NAME_PK_ID + " = ?";
+        String[] selectionArgs = {id};
+
+        Cursor cursor = db.query(
+                ContractSql.Consultoras.TABLE_NAME,               //Nombre de la tabla
+                projection,                                 //Campos requeridos de la tabla
+                selection,                                 //Condicion Where
+                selectionArgs,                             // Argumentos de la condicion
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            bIsOk = true;
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                nombre_consultora.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NOMBRE)));
+                telefono_consultora.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_TELEFONO)));
+                direccion_consultora.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_DIRECCION)));
+                nivel_consultora.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NIVEL)));
+
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return bIsOk;
+    }
+
 
     public static void consultaClientes(Application context, List<String> items, List<String> itemTel, List<String> itemId) {
 
@@ -234,6 +311,27 @@ public class UtilsDml {
         }
         cursor.close();
         db.close();
+
+    }
+
+    public static boolean consultoraUpdate(Application context, String id,String nombre, String telefono, String direccion, String nivel){
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ContractSql.Consultoras.COLIMN_NAME_NOMBRE,nombre);
+        values.put(ContractSql.Consultoras.COLIMN_NAME_TELEFONO,telefono);
+        values.put(ContractSql.Consultoras.COLIMN_NAME_DIRECCION,direccion);
+        values.put(ContractSql.Consultoras.COLIMN_NAME_NIVEL,nivel);
+
+        String selection = ContractSql.Consultoras.COLIMN_NAME_PK_ID + " =?";
+        String[] selectionArgs = {id};
+
+        int result = db.update(ContractSql.Consultoras.TABLE_NAME,values,selection,selectionArgs);
+        db.close();
+
+        return result > 0;
 
     }
 

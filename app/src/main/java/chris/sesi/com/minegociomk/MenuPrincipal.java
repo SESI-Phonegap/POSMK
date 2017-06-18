@@ -149,7 +149,7 @@ public class MenuPrincipal extends AppCompatActivity
             startActivity(intent);
 
         }else if (id == R.id.consultoras){
-            Intent intent = new Intent(fabVender.getContext(), FormNuevaConsultora.class);
+            Intent intent = new Intent(fabVender.getContext(), ConsultoraList.class);
             startActivity(intent);
         }else if (id == R.id.nav_user) {
 

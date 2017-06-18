@@ -18,10 +18,16 @@ import java.util.regex.Pattern;
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
 import chris.sesi.com.minegociomk.ClientList;
+import chris.sesi.com.minegociomk.ConsultoraList;
 import chris.sesi.com.minegociomk.R;
 
 
 public class Utils {
+
+    private final static String ORIGIN_ACTIVITY = "origin_activity";
+    private final static String CLIENTES = "clientes";
+    private final static String CONSULTORAS = "consultoras";
+
     public static boolean validarEmail(String email) {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         return pattern.matcher(email).matches();
@@ -33,7 +39,7 @@ public class Utils {
      * but whatever you draw will disappear once the swipe is over, and while the items are animating to their new position the recycler view
      * background will be visible. That is rarely an desired effect.
      */
-    public static void setUpItemTouchHelperLlamar(final Application context, final RecyclerView recyclerView) {
+    public static void setUpItemTouchHelperLlamar(final Application context, final RecyclerView recyclerView, final String origenActivity) {
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
@@ -42,6 +48,8 @@ public class Utils {
             Drawable xMark;
             int xMarkMargin;
             boolean initiated;
+            ClientList.TestAdapter testAdapter;
+            ConsultoraList.TestAdapter testAdapterConsultora;
 
             private void init() {
                 background = ContextCompat.getDrawable(context, R.drawable.c_blue);
@@ -60,9 +68,16 @@ public class Utils {
             @Override
             public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 int position = viewHolder.getAdapterPosition();
-                ClientList.TestAdapter testAdapter = (ClientList.TestAdapter) recyclerView.getAdapter();
-                if (testAdapter.isUndoOn() && testAdapter.isPendingRemoval(position)) {
-                    return 0;
+                if (origenActivity.equals(CLIENTES)) {
+                    testAdapter = (ClientList.TestAdapter) recyclerView.getAdapter();
+                    if (testAdapter.isUndoOn() && testAdapter.isPendingRemoval(position)) {
+                        return 0;
+                    }
+                } else {
+                    testAdapterConsultora = (ConsultoraList.TestAdapter) recyclerView.getAdapter();
+                    if (testAdapterConsultora.isUndoOn() && testAdapterConsultora.isPendingRemoval(position)) {
+                        return 0;
+                    }
                 }
                 return super.getSwipeDirs(recyclerView, viewHolder);
             }
@@ -70,14 +85,30 @@ public class Utils {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int swipedPosition = viewHolder.getAdapterPosition();
-                ClientList.TestAdapter adapter = (ClientList.TestAdapter) recyclerView.getAdapter();
-                boolean undoOn = adapter.isUndoOn();
-                if (undoOn) {
+                if (origenActivity.equals(CLIENTES)) {
+                    ClientList.TestAdapter adapter = (ClientList.TestAdapter) recyclerView.getAdapter();
 
-                    adapter.llamar(swipedPosition);
 
+                    boolean undoOn = adapter.isUndoOn();
+                    if (undoOn) {
+
+                        adapter.llamar(swipedPosition);
+
+                    } else {
+                        adapter.remove(swipedPosition);
+                    }
                 } else {
-                    adapter.remove(swipedPosition);
+                    ConsultoraList.TestAdapter adapter = (ConsultoraList.TestAdapter) recyclerView.getAdapter();
+
+
+                    boolean undoOn = adapter.isUndoOn();
+                    if (undoOn) {
+
+                        adapter.llamar(swipedPosition);
+
+                    } else {
+                        adapter.remove(swipedPosition);
+                    }
                 }
             }
 
