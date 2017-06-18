@@ -32,6 +32,9 @@ public class MenuPrincipal extends AppCompatActivity
     private TextView nav_user_name, nav_user_category;
     private String _nivelMk, _name;
     private DrawerLayout drawer;
+    private final static String ORIGIN_ACTIVITY = "origin_activity";
+    private final static String ACTUALIZAR = "actualizar";
+    private final static String ALTA = "alta";
 
 
     @Override
@@ -66,6 +69,7 @@ public class MenuPrincipal extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), FormNuevoCliente.class);
+                intent.putExtra(ORIGIN_ACTIVITY,ALTA);
                 startActivityForResult(intent, 0);
             }
         });

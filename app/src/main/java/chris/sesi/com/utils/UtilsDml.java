@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.EditText;
+
 import java.util.List;
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
@@ -74,6 +76,25 @@ public class UtilsDml {
         values.put(ContractSql.User.COLUMN_NAME_PASS_MK, passMk);
 
         if (sqLiteDatabase.insert(ContractSql.User.TABLE_NAME, null, values) != -1){
+            bIsOk = true;
+        }
+        sqLiteDatabase.close();
+        return  bIsOk;
+    }
+
+    public static boolean altaConsultora(Application context, String nombre, String nivel, String direccion, String telefono){
+        boolean bIsOk = false;
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase sqLiteDatabase = adminSQLiteOpenHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ContractSql.Consultoras.COLIMN_NAME_NOMBRE, nombre);
+        values.put(ContractSql.Consultoras.COLIMN_NAME_NIVEL, nivel);
+        values.put(ContractSql.Consultoras.COLIMN_NAME_DIRECCION, direccion);
+        values.put(ContractSql.Consultoras.COLIMN_NAME_TELEFONO, telefono);
+
+        if (sqLiteDatabase.insert(ContractSql.Consultoras.TABLE_NAME, null, values) != -1){
             bIsOk = true;
         }
         sqLiteDatabase.close();
@@ -177,6 +198,125 @@ public class UtilsDml {
         db.close();
 
         return bIsOk;
+    }
+
+
+    public static void consultaClientes(Application context, List<String> items, List<String> itemTel, List<String> itemId) {
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        //Columnas requeridas
+        String[] projection = {ContractSql.Clientes.COLUMN_NAME_PK_ID,
+                ContractSql.Clientes.COLUMN_NAME_NOMBRE,
+                ContractSql.Clientes.COLUMN_NAME_TELEFONO};
+        //Filtro del query WHERE
+        String selection = "";
+        String[] selectionArgs = {};
+
+        Cursor cursor = db.query(
+                ContractSql.Clientes.TABLE_NAME,               //Nombre de la tabla
+                projection,                                 //Campos requeridos de la tabla
+                selection,                                 //Condicion Where
+                selectionArgs,                             // Argumentos de la condicion
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                itemId.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_PK_ID)));
+                items.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_NOMBRE)));
+                itemTel.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_TELEFONO)));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+    }
+
+    public static boolean ClientDetail(Application context, String id, EditText nombre_cliente,
+                                    EditText telefono_cliente, EditText direccion_cliente, EditText ocupacion_cliente){
+
+        boolean bIsOk = false;
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        //Columnas requeridas
+        String[] projection = {ContractSql.Clientes.COLUMN_NAME_PK_ID,
+                ContractSql.Clientes.COLUMN_NAME_NOMBRE,
+                ContractSql.Clientes.COLUMN_NAME_TELEFONO,
+                ContractSql.Clientes.COLUMN_NAME_DIRECCION,
+                ContractSql.Clientes.COLUMN_NAME_OCUPACION};
+        //Filtro del query WHERE
+        String selection = ContractSql.Clientes.COLUMN_NAME_PK_ID + " = ?";
+        String[] selectionArgs = {id};
+
+        Cursor cursor = db.query(
+                ContractSql.Clientes.TABLE_NAME,               //Nombre de la tabla
+                projection,                                 //Campos requeridos de la tabla
+                selection,                                 //Condicion Where
+                selectionArgs,                             // Argumentos de la condicion
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            bIsOk = true;
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                nombre_cliente.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_NOMBRE)));
+                telefono_cliente.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_TELEFONO)));
+                direccion_cliente.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_DIRECCION)));
+                ocupacion_cliente.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_OCUPACION)));
+
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return bIsOk;
+    }
+
+    public static boolean ClientUpdate(Application context, String id,String nombre, String telefono, String direccion, String ocupacion){
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ContractSql.Clientes.COLUMN_NAME_NOMBRE,nombre);
+        values.put(ContractSql.Clientes.COLUMN_NAME_TELEFONO,telefono);
+        values.put(ContractSql.Clientes.COLUMN_NAME_DIRECCION,direccion);
+        values.put(ContractSql.Clientes.COLUMN_NAME_OCUPACION,ocupacion);
+
+        String selection = ContractSql.Clientes.COLUMN_NAME_PK_ID + " =?";
+        String[] selectionArgs = {id};
+
+        int result = db.update(ContractSql.Clientes.TABLE_NAME,values,selection,selectionArgs);
+        db.close();
+
+        return result > 0;
+
+    }
+
+
+    public static boolean altaCliente(Application context, String nombre, String direccion, String telefono, String ocupacion){
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase sqLiteDatabase = adminSQLiteOpenHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ContractSql.Clientes.COLUMN_NAME_NOMBRE,nombre);
+        values.put(ContractSql.Clientes.COLUMN_NAME_DIRECCION,direccion);
+        values.put(ContractSql.Clientes.COLUMN_NAME_TELEFONO,telefono);
+        values.put(ContractSql.Clientes.COLUMN_NAME_OCUPACION,ocupacion);
+
+        long result = sqLiteDatabase.insert(ContractSql.Clientes.TABLE_NAME, null, values);
+        sqLiteDatabase.close();
+
+        return result > 0;
     }
 
 
