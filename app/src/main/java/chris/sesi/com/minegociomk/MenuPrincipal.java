@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
+import chris.sesi.com.utils.Utils;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MenuPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +37,7 @@ public class MenuPrincipal extends AppCompatActivity
     private final static String ORIGIN_ACTIVITY = "origin_activity";
     private final static String ACTUALIZAR = "actualizar";
     private final static String ALTA = "alta";
+    private CircleImageView circleImageViewUser;
 
 
     @Override
@@ -43,6 +46,7 @@ public class MenuPrincipal extends AppCompatActivity
         setContentView(R.layout.activity_menu_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         fabLayoutNuevoCliente = (LinearLayout) findViewById(R.id.fabLayoutNcliente);
         fabLayoutPrestar = (LinearLayout) findViewById(R.id.fabLayoutPrestar);
         fabLayoutAbono = (LinearLayout) findViewById(R.id.fabLayoutAbono);
@@ -92,6 +96,7 @@ public class MenuPrincipal extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         nav_user_name = (TextView) headerView.findViewById(R.id.nav_user_name);
         nav_user_category = (TextView) headerView.findViewById(R.id.nav_user_category);
+        circleImageViewUser = (CircleImageView) headerView.findViewById(R.id.imageView);
         obtenerUsuario();
     }
 
@@ -131,31 +136,50 @@ public class MenuPrincipal extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        Intent intent;
         int id = item.getItemId();
 
-        if (id == R.id.nav_clientes) {
-            Intent intent = new Intent(fabVender.getContext(), ClientList.class);
-            startActivity(intent);
-            // Handle the camera action
-        } else if (id == R.id.nav_ventas) {
+        switch (id){
+            case R.id.nav_clientes:
+                intent = new Intent(fabVender.getContext(), ClientList.class);
+                startActivity(intent);
+                break;
 
+            case R.id.nav_ventas:
 
-        } else if (id == R.id.nav_inventario) {
-            Intent intent = new Intent(fabVender.getContext(), Inventario.class);
-            startActivity(intent);
+                break;
 
-        } else if (id == R.id.nav_catalogo) {
-            Intent intent = new Intent(fabVender.getContext(), Catalogo.class);
-            startActivity(intent);
+            case R.id.nav_inventario:
+                intent = new Intent(fabVender.getContext(), Inventario.class);
+                startActivity(intent);
+                break;
 
-        }else if (id == R.id.consultoras){
-            Intent intent = new Intent(fabVender.getContext(), ConsultoraList.class);
-            startActivity(intent);
-        }else if (id == R.id.nav_user) {
+            case R.id.nav_catalogo:
+                intent = new Intent(fabVender.getContext(), Catalogo.class);
+                startActivity(intent);
+                break;
 
-        } else if (id == R.id.nav_send) {
+            case R.id.consultoras:
+                intent = new Intent(fabVender.getContext(), ConsultoraList.class);
+                startActivity(intent);
+                break;
 
+            case R.id.nav_user:
+
+                break;
+
+            case R.id.nav_cerrarSesion:
+                Utils.savePreferenceSesionAutomatico(getApplicationContext(),false);
+                Utils.cerrarSesion(getApplication());
+                finish();
+                break;
+
+            case R.id.nav_compartir:
+                Utils.compartirRedesSociales(getApplication());
+                break;
         }
+
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

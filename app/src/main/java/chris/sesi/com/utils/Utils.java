@@ -1,24 +1,39 @@
 package chris.sesi.com.utils;
 
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
 import chris.sesi.com.minegociomk.ClientList;
 import chris.sesi.com.minegociomk.ConsultoraList;
+import chris.sesi.com.minegociomk.MainActivity;
 import chris.sesi.com.minegociomk.R;
 
 
@@ -27,12 +42,84 @@ public class Utils {
     private final static String ORIGIN_ACTIVITY = "origin_activity";
     private final static String CLIENTES = "clientes";
     private final static String CONSULTORAS = "consultoras";
+    private final static String LINK_APP_PLAYSTORE = "APP";
+    private final static String SAVE_DEFAULT_SESION_AUTOMATICA = "save_default_sesion_automatica";
+    private final static boolean DEFAULT_SESION = false;
 
+
+    public static void cerrarSesion(Application context){
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+
+    }
     public static boolean validarEmail(String email) {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         return pattern.matcher(email).matches();
     }
 
+    public static void savePreferenceSesionAutomatico(Context context, boolean sesion) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(SAVE_DEFAULT_SESION_AUTOMATICA, sesion);
+        editor.apply();
+
+    }
+
+    public static boolean getPreferenceDefaultSesionAutomatic(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(SAVE_DEFAULT_SESION_AUTOMATICA, DEFAULT_SESION);
+    }
+
+    public static void compartirRedesSociales(Application context){
+        List<Intent> targetShareIntents = new ArrayList<>();
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        PackageManager pm = context.getApplicationContext().getPackageManager();
+        List<ResolveInfo> resInfos = pm.queryIntentActivities(shareIntent, 0);
+        if (!resInfos.isEmpty()) {
+         //   System.out.println("Have package");
+            for (ResolveInfo resInfo : resInfos) {
+                String packageName = resInfo.activityInfo.packageName;
+                Log.i("Package Name", packageName);
+
+/*         if (packageName.contains("com.twitter.android") || packageName.contains("com.facebook.katana")
+                 || packageName.contains("com.whatsapp") || packageName.contains("com.google.android.apps.plus")
+                 || packageName.contains("com.google.android.talk") || packageName.contains("com.slack")
+                 || packageName.contains("com.google.android.gm") || packageName.contains("com.facebook.orca")
+                 || packageName.contains("com.yahoo.mobile") || packageName.contains("com.skype.raider")
+                 || packageName.contains("com.android.mms")|| packageName.contains("com.linkedin.android")
+                 || packageName.contains("com.google.android.apps.messaging")) {*/
+                if (packageName.contains("com.twitter.android") || packageName.contains("com.facebook.katana")
+                        || packageName.contains("com.google.android.apps.plus") || packageName.contains("com.whatsapp")
+                        || packageName.contains("com.android.mms")|| packageName.contains("com.google.android.apps.messaging")) {
+                    Intent intent = new Intent();
+
+                    intent.setComponent(new ComponentName(packageName, resInfo.activityInfo.name));
+                    intent.putExtra("AppName", resInfo.loadLabel(pm).toString());
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_TEXT, LINK_APP_PLAYSTORE);
+                    intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.compartir));
+                    intent.setPackage(packageName);
+                    targetShareIntents.add(intent);
+                }
+            }
+            if (!targetShareIntents.isEmpty()) {
+                Collections.sort(targetShareIntents, new Comparator<Intent>() {
+                    @Override
+                    public int compare(Intent o1, Intent o2) {
+                        return o1.getStringExtra("AppName").compareTo(o2.getStringExtra("AppName"));
+                    }
+                });
+                Intent chooserIntent = Intent.createChooser(targetShareIntents.remove(0), "Select app to share");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetShareIntents.toArray(new Parcelable[]{}));
+                context.startActivity(chooserIntent);
+            } else {
+                Toast.makeText(context.getApplicationContext(), "No app to share.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     /**
      * This is the standard support library way of implementing "swipe to delete" feature. You can do custom drawing in onChildDraw method

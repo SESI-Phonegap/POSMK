@@ -27,7 +27,10 @@
     <string name="clientes">Clientes</string>
     <string name="catalogo">Catalogo</string>
     <string name="datosdeusuario">Datos de usuario</string>
-    <string name="nav_usuario">Usuario</string>
+    <string name="compartir">Compartir</string>
+    <string name="cerrarsesion">Cerrar sesión</string>
+    <string name="compartirAmigo">Compartir con tus amigos</string>
+    <string name="nav_perfil">Perfil</string>
     <string name="title_activity_form_nuevo_cliente">Nuevo Cliente</string>
     <string name="btn_cancelar">Cancelar</string>
     <string name="llamando">Llamando</string>

@@ -16,11 +16,50 @@ import chris.sesi.com.database.ContractSql;
 
 public class UtilsDml {
 
+    public static boolean checkUserExist(Application context){
+        boolean bIsOk = false;
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        //Columnas requeridas
+        String[] projection = {ContractSql.User.COLUMN_NAME_PK_ID};
+        //Filtro del query WHERE
+        String selection = "";
+        String[] selectionArgs = {};
+
+        //   String sortOrder = "";  // Orden de la consulta
+
+        Cursor cursor = db.query(
+                ContractSql.User.TABLE_NAME,               //Nombre de la tabla
+                projection,                                 //Campos requeridos de la tabla
+                selection,                                 //Condicion Where
+                selectionArgs,                             // Argumentos de la condicion
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            //     idEmail = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PK_ID));
+            //     passUser = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PASS_USER));
+            cursor.close();
+            db.close();
+            bIsOk = true;
+         /*   Intent intent = new Intent(context, MenuPrincipal.class);
+            context.startActivity(intent);*/
+
+
+        } else {
+            cursor.close();
+            db.close();
+        }
+
+        return bIsOk;
+    }
+
     public static boolean iniciarSesion(Application context, View view, String user, String pass) {
         boolean bIsOk = false;
        // String passUser, idEmail;
 
-        Snackbar.make(view, "User: " + user + " Pass: " + pass, Snackbar.LENGTH_LONG).show();
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
 
