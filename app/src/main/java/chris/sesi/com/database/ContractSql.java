@@ -12,6 +12,7 @@ public final class ContractSql {
         public static final String COLUMN_NAME_PASS_USER = "pass_user";
         public static final String COLUMN_NAME_USER_MK = "user_mk";
         public static final String COLUMN_NAME_PASS_MK = "pass_mk";
+        public static final String COLUMN_NAME_SRC_IMAGEUSER = "imageUser";
 
     }
 

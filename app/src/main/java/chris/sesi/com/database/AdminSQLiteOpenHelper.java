@@ -23,6 +23,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 ContractSql.User.COLUMN_NAME_NIVELMK + " TEXT  , "+
                 ContractSql.User.COLUMN_NAME_PASS_USER + " TEXT  , "+
                 ContractSql.User.COLUMN_NAME_USER_MK + " TEXT  , "+
+                ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER + " TEXT ,"+
                 ContractSql.User.COLUMN_NAME_PASS_MK + " TEXT  );"
         );
 

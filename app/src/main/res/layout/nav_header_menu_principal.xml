@@ -16,28 +16,38 @@
         android:layout_centerVertical="true"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:civ_border_width="1dp"
-        app:civ_border_color="#FF000000"
+        app:civ_border_color="@color/white"
         android:src="@drawable/femeie" />
 
     <TextView
         android:id="@+id/nav_user_name"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="55dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/imageView"
+        android:layout_marginStart="5dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:ellipsize="end"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/nav_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imageView"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_below="@id/nav_user_name"
+        android:ellipsize="end"
+        android:maxLines="1"/>
 
     <TextView
         android:id="@+id/nav_user_category"
         android:layout_toEndOf="@id/imageView"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
-        android:layout_below="@id/nav_user_name"
+        android:layout_below="@id/nav_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-         />
+        android:ellipsize="end"
+        android:maxLines="1"/>
 
 </RelativeLayout>

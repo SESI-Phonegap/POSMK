@@ -2,16 +2,21 @@ package chris.sesi.com.utils;
 
 import android.app.Application;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
+import chris.sesi.com.minegociomk.MainActivity;
+import chris.sesi.com.minegociomk.R;
 
 
 public class UtilsDml {
@@ -99,6 +104,61 @@ public class UtilsDml {
         return bIsOk;
     }
 
+    public static boolean obtenerUsuario(Application context, String[] data) {
+
+        boolean bIsOk = false;
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        //Columnas requeridas
+        String[] projection = {ContractSql.User.COLUMN_NAME_PK_ID,
+                ContractSql.User.COLUMN_NAME_NOMBRE,
+                ContractSql.User.COLUMN_NAME_NIVELMK,
+                ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER};
+        //Filtro del query WHERE
+        String selection = "";
+        String[] selectionArgs = {};
+
+        Cursor cursor = db.query(
+                ContractSql.User.TABLE_NAME,               //Nombre de la tabla
+                projection,                                 //Campos requeridos de la tabla
+                selection,                                 //Condicion Where
+                selectionArgs,                             // Argumentos de la condicion
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            bIsOk = true;
+            data[0] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PK_ID));
+            data[1] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NOMBRE));
+            data[2] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NIVELMK));
+            data[3] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER));
+/*
+            if (uriImageUser != null) {
+                if (uriImageUser.toString().equals("")){
+                    circleImageViewUser.setImageResource(R.drawable.femeie);
+                }else {
+                    circleImageViewUser.setImageURI(uriImageUser);
+                }
+            }
+
+            nav_email.setText(_idEmail);
+            nav_user_name.setText(_name);
+            nav_user_category.setText(_nivelMk);
+            nav_user_category.setVisibility(View.VISIBLE); */
+
+        } else {
+            Toast.makeText(context, context.getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context,MainActivity.class);
+            context.startActivity(intent);
+        }
+        cursor.close();
+        db.close();
+
+        return bIsOk;
+    }
+
     public static boolean altaUsuario(Application context, String email, String nombre, String contraseña,
                             String userMk, String passMk, String nivelMk ){
         boolean bIsOk = false;
@@ -112,6 +172,7 @@ public class UtilsDml {
         values.put(ContractSql.User.COLUMN_NAME_NIVELMK, nivelMk);
         values.put(ContractSql.User.COLUMN_NAME_PASS_USER, contraseña);
         values.put(ContractSql.User.COLUMN_NAME_USER_MK, userMk);
+        values.put(ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER, "");
         values.put(ContractSql.User.COLUMN_NAME_PASS_MK, passMk);
 
         if (sqLiteDatabase.insert(ContractSql.User.TABLE_NAME, null, values) != -1){
@@ -119,6 +180,22 @@ public class UtilsDml {
         }
         sqLiteDatabase.close();
         return  bIsOk;
+    }
+
+    public static boolean updateImageUser(Application context, String idEmail, String uriImage){
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER,uriImage);
+
+        String selection = ContractSql.User.COLUMN_NAME_PK_ID + " =?";
+        String[] selectionArgs = {idEmail};
+
+        int result = db.update(ContractSql.User.TABLE_NAME,values,selection,selectionArgs);
+        db.close();
+
+        return result > 0;
     }
 
     public static boolean altaConsultora(Application context, String nombre, String nivel, String direccion, String telefono){
