@@ -28,7 +28,7 @@
     <item android:title="@string/datosdeusuario">
         <menu>
             <item
-                android:id="@+id/nav_user"
+                android:id="@+id/nav_user_profile"
                 android:icon="@drawable/ic_account_circle_black_24dp"
                 android:title="@string/nav_perfil" />
             <item

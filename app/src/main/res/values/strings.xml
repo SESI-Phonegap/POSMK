@@ -78,6 +78,7 @@
     <string name="title_activity_venta">Venta</string>
     <string name="title_activity_registrate">Registrate</string>
     <string name="title_activity_consultora_list">ConsultoraList</string>
+    <string name="title_activity_user_profile">UserProfile</string>
 
 
 </resources>

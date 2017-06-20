@@ -249,8 +249,9 @@ public class MenuPrincipal extends AppCompatActivity
                 startActivity(intent);
                 break;
 
-            case R.id.nav_user:
-
+            case R.id.nav_user_profile:
+                intent = new Intent(this,UserProfile.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_cerrarSesion:

@@ -36,14 +36,14 @@
         <activity
             android:name=".MenuPrincipal"
             android:label="@string/title_activity_menu_principal"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".FormNuevoCliente"
             android:label="@string/title_activity_form_nuevo_cliente"
             android:parentActivityName=".MenuPrincipal"
-            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -55,8 +55,8 @@
             android:name=".ClientList"
             android:label="@string/title_activity_client_list"
             android:parentActivityName=".MenuPrincipal"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -67,8 +67,8 @@
             android:name=".Edit_Client"
             android:label="@string/title_activity_edit__client"
             android:parentActivityName=".ClientList"
-            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -80,8 +80,8 @@
             android:name=".Catalogo"
             android:label="@string/title_activity_catalogo"
             android:parentActivityName=".MenuPrincipal"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -92,8 +92,8 @@
             android:name=".Inventario"
             android:label="@string/title_activity_inventario"
             android:parentActivityName=".MenuPrincipal"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -104,8 +104,8 @@
             android:name=".FormAgregarStock"
             android:label="@string/title_activity_form_agregar_stock"
             android:parentActivityName=".Inventario"
-            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -114,22 +114,25 @@
         <activity
             android:name=".Venta"
             android:label="@string/title_activity_venta"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".FormNuevaConsultora"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".FormNuevaConsultora"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ConsultoraList"
             android:label="@string/title_activity_consultora_list"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MenuPrincipal" />
         </activity>
+        <activity
+            android:name=".UserProfile"
+            android:label="@string/title_activity_user_profile"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
