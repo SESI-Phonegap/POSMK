@@ -19,6 +19,7 @@ public final class ContractSql {
     public static class Clientes{
         public static final String TABLE_NAME = "clientes";
         public static final String COLUMN_NAME_PK_ID = "id_cliente";
+        public static final String COLUMN_NAME_SRC_IMAGECLIENT = "imageClient";
         public static final String COLUMN_NAME_NOMBRE = "nombre";
         public static final String COLUMN_NAME_DIRECCION = "direccion";
         public static final String COLUMN_NAME_TELEFONO = "telefono";

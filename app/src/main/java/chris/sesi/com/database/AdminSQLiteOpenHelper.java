@@ -30,6 +30,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         //---------------------TABLA CLIENTES ---------------------------
         db.execSQL("CREATE TABLE " + ContractSql.Clientes.TABLE_NAME + " ("+
                 ContractSql.Clientes.COLUMN_NAME_PK_ID + " INTEGER PRIMARY KEY, "+
+                ContractSql.Clientes.COLUMN_NAME_SRC_IMAGECLIENT + " TEXT , " +
                 ContractSql.Clientes.COLUMN_NAME_NOMBRE + " TEXT  , " +
                 ContractSql.Clientes.COLUMN_NAME_DIRECCION + " TEXT  , " +
                 ContractSql.Clientes.COLUMN_NAME_TELEFONO + " TEXT  , " +

@@ -1,5 +1,6 @@
 package chris.sesi.com.utils;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.ContentValues;
@@ -13,8 +14,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -34,6 +38,7 @@ import chris.sesi.com.database.ContractSql;
 import chris.sesi.com.minegociomk.ClientList;
 import chris.sesi.com.minegociomk.ConsultoraList;
 import chris.sesi.com.minegociomk.MainActivity;
+import chris.sesi.com.minegociomk.MenuPrincipal;
 import chris.sesi.com.minegociomk.R;
 
 
@@ -56,6 +61,7 @@ public class Utils {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         return pattern.matcher(email).matches();
     }
+
 
     public static void savePreferenceSesionAutomatico(Context context, boolean sesion) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
