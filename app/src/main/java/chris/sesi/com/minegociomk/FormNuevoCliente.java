@@ -185,7 +185,7 @@ public class FormNuevoCliente extends AppCompatActivity {
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
             //  Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
             //resume tasks needing this permission
-            openGallery();
+          //  openGallery();
         }
     }
 

@@ -40,6 +40,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         //----------------------TABLA PRODUCTO---------------------------
         db.execSQL("CREATE TABLE " + ContractSql.Producto.TABLE_NAME + " (" +
                 ContractSql.Producto.COLUMN_NAME_PK_ID + " INTEGER PRIMARY KEY, " +
+                ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO + " TEXT , "+
                 ContractSql.Producto.COLUMN_NAME_NOMBRE + " TEXT  , "+
                 ContractSql.Producto.COLUMN_NAME_DESCRIPCION + " TEXT  , " +
                 ContractSql.Producto.COLUMN_NAME_VENDIDOS + " INTEGER   );"
@@ -114,16 +115,16 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 ContractSql.PrestamoConsultora.FOREIGN_KEY_ID_PRODUCTO + " );"
         );
 
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('Paso 1: Crema Protectora Restauradora para Manos Satin Hands®', '', 0);" );
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('Paso 2: Crema Exfoliante Refinadora para Manos con Karité Satin Hands', '', 0);" );
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('Paso 3: Crema para Manos con Karité Satin Hands', '', 0);" );
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('Microexfoliante Refinador TimeWise', '', 0);" );
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('Minimizador de Poros TimeWise', '', 0);" );
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Paso 1: Crema Protectora Restauradora para Manos Satin Hands®', '', 0);" );
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Paso 2: Crema Exfoliante Refinadora para Manos con Karité Satin Hands', '', 0);" );
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Paso 3: Crema para Manos con Karité Satin Hands', '', 0);" );
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Microexfoliante Refinador TimeWise', '', 0);" );
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Minimizador de Poros TimeWise', '', 0);" );
 
 
 

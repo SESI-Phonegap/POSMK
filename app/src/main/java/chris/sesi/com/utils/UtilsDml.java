@@ -217,13 +217,15 @@ public class UtilsDml {
         return  bIsOk;
     }
 
-    public static void consultaCatalogo(Application context,List<String> items, List<String> itemsid){
+    public static void consultaCatalogo(Application context,List<String> items, List<String> itemsid, List<String> itemPhoto){
         items.clear();
         itemsid.clear();
+        itemPhoto.clear();
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
 
         String[] projection = {ContractSql.Producto.COLUMN_NAME_NOMBRE,
+                ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO,
                 ContractSql.Producto.COLUMN_NAME_PK_ID};
 
         //Filtro del query WHERE
@@ -244,6 +246,7 @@ public class UtilsDml {
             do {
                 items.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_NOMBRE)));
                 itemsid.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_PK_ID)));
+                itemPhoto.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO)));
 
             }while (cursor.moveToNext());
         }
@@ -251,12 +254,13 @@ public class UtilsDml {
         db.close();
     }
 
-    public static void insertProduct(Application context,String product){
+    public static void insertProduct(Application context,String product, String uriPhoto){
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(ContractSql.Producto.COLUMN_NAME_NOMBRE,product);
+        values.put(ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO, uriPhoto);
         values.put(ContractSql.Producto.COLUMN_NAME_DESCRIPCION, "");
         values.put(ContractSql.Producto.COLUMN_NAME_VENDIDOS,0);
 
