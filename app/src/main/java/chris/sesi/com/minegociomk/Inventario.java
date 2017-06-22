@@ -2,8 +2,11 @@ package chris.sesi.com.minegociomk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,15 +23,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import chris.sesi.com.utils.UtilsDml;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Inventario extends AppCompatActivity implements SearchView.OnQueryTextListener{
-    RecyclerView recyclerView;
-    List<String> items;
-    List<String> itemsID;
-    TestAdapter testAdapter;
+    private RecyclerView recyclerView;
+    private List<String> items;
+    private List<String> itemsID;
+    private List<String> itemPhoto;
+    private TestAdapter testAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +47,9 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_inventario);
         items = new ArrayList<>();
         itemsID = new ArrayList<>();
+        itemPhoto = new ArrayList<>();
 
-        if (!UtilsDml.consultaInventario(getApplication(),items,itemsID)){
+        if (!UtilsDml.consultaInventario(getApplication(),items,itemsID,itemPhoto)){
             Toast.makeText(this,getString(R.string.sinInventario),Toast.LENGTH_LONG).show();
         }
         setUpRecyclerView();
@@ -106,7 +115,9 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
             Inventario.TestViewHolder viewHolder = (Inventario.TestViewHolder) holder;
             final String item = items.get(position);
             final String item_Id = itemsID.get(position);
+            final String item_photo = itemPhoto.get(position);
 
+            Log.d("DDDD--",item_photo);
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -122,7 +133,18 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
             viewHolder.item.setVisibility(View.VISIBLE);
             viewHolder.icon.setVisibility(View.VISIBLE);
             viewHolder.item.setText(item);
-            viewHolder.icon.setImageResource(R.drawable.a_avator);
+            if (Uri.parse(item_photo).toString().equals("")) {
+                viewHolder.icon.setImageResource(R.drawable.ni_image);
+            } else {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(item_photo));
+                    viewHolder.icon.setImageBitmap(bitmap);
+                    // viewHolder.icon.setImageURI(Uri.parse(item_photo));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -130,6 +152,7 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
                     Intent intent = new Intent(context,FormAgregarStock.class);
                     intent.putExtra("ID_Product",item_Id);
                     intent.putExtra("item_Name",item);
+                    intent.putExtra("item_photo",item_photo);
                     context.startActivity(intent);
                 }
             });
@@ -150,13 +173,13 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
 
     private static class TestViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView icon;
+        CircleImageView icon;
         TextView item;
         View mView;
 
         TestViewHolder(ViewGroup parent){
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view_inventario, parent, false));
-            icon = (ImageView) itemView.findViewById(R.id.list_icon_inventario);
+            icon = (CircleImageView) itemView.findViewById(R.id.list_icon_inventario);
             item = (TextView) itemView.findViewById(R.id.item_inventario);
             mView = itemView;
         }

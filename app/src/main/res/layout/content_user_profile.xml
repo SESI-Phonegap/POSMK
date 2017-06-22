@@ -37,7 +37,6 @@
                 android:layout_height="100dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:saveEnabled="false"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/femeie"
                 app:civ_border_color="@color/white"

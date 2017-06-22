@@ -59,6 +59,7 @@
     <string name="Cobrar">Cobrar   $</string>
     <string name="nuevoCliente">Nuevo Cliente</string>
     <string name="nuevaConsultora">Nueva Consultora</string>
+    <string name="cobrar">Cobrar $%1$s</string>
 
     <string name="Nombre">Nombre</string>
     <string name="Direcccion">Direccion</string>

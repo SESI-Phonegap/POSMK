@@ -148,9 +148,7 @@ public class UtilsDml {
         return bIsOk;
     }
 
-    public static boolean obtenerUsuarioForProfile(Application context, EditText email, EditText nombre,
-                                                   EditText nivel, EditText pass, EditText userMk,
-                                                   EditText passMk, Uri uriImage) {
+    public static boolean obtenerUsuarioForProfile(Application context, String[] data) {
 
         boolean bIsOk = false;
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
@@ -179,13 +177,13 @@ public class UtilsDml {
 
         if (cursor.moveToFirst()) {
             bIsOk = true;
-            email.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PK_ID)));
-            nombre.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NOMBRE)));
-            nivel.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NIVELMK)));
-            userMk.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_USER_MK)));
-            passMk.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PASS_MK)));
-            uriImage = Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER)));
-            pass.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PASS_USER)));
+            data[0] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PK_ID));
+            data[1] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NOMBRE));
+            data[2] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NIVELMK));
+            data[3] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_USER_MK));
+            data[4] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PASS_MK));
+            data[5] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PASS_USER));
+            data[6] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER));
 
         } else {
             Toast.makeText(context, context.getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
@@ -257,7 +255,7 @@ public class UtilsDml {
     }
 
 
-    public static void consultaCatalogo(Application context,List<String> items, List<String> itemsid, List<String> itemPhoto){
+    public static void consultaCatalogo(Application context, List<String> items, List<String> itemsid, List<String> itemPhoto) {
         items.clear();
         itemsid.clear();
         itemPhoto.clear();
@@ -294,13 +292,13 @@ public class UtilsDml {
         db.close();
     }
 
-    public static void insertProduct(Application context,String product, String uriPhoto){
+    public static void insertProduct(Application context, String product, String uriPhoto) {
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        values.put(ContractSql.Producto.COLUMN_NAME_NOMBRE,product);
+        values.put(ContractSql.Producto.COLUMN_NAME_NOMBRE, product);
         values.put(ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO, uriPhoto);
         values.put(ContractSql.Producto.COLUMN_NAME_DESCRIPCION, "");
         values.put(ContractSql.Producto.COLUMN_NAME_VENDIDOS, 0);
@@ -310,14 +308,15 @@ public class UtilsDml {
 
     }
 
-    public static boolean consultaInventario(Application context, List<String> items, List<String> itemId) {
+    public static boolean consultaInventario(Application context, List<String> items, List<String> itemId, List<String> itemPhoto) {
         boolean bIsOk = false;
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
 
         String[] projection = {ContractSql.Producto.TABLE_NAME + "." + ContractSql.Producto.COLUMN_NAME_NOMBRE,
                 ContractSql.Inventario.TABLE_NAME + "." + ContractSql.Inventario.COLUMN_NAME_FK_ID_PRODUCTO,
-                ContractSql.Inventario.TABLE_NAME + "." + ContractSql.Inventario.COLUMN_NAME_STOCK};
+                ContractSql.Inventario.TABLE_NAME + "." + ContractSql.Inventario.COLUMN_NAME_STOCK,
+                ContractSql.Producto.TABLE_NAME + "." + ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO};
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(ContractSql.Producto.TABLE_NAME + " INNER JOIN " + ContractSql.Inventario.TABLE_NAME + " ON " +
@@ -352,6 +351,7 @@ public class UtilsDml {
             do {
                 items.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_NOMBRE)));
                 itemId.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Inventario.COLUMN_NAME_FK_ID_PRODUCTO)));
+                itemPhoto.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO)));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -474,23 +474,23 @@ public class UtilsDml {
 
     }
 
-    public static boolean updateImageClient(Application context, String id, String uriImage){
+    public static boolean updateImageClient(Application context, String id, String uriImage) {
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(ContractSql.Clientes.COLUMN_NAME_SRC_IMAGECLIENT,uriImage);
+        values.put(ContractSql.Clientes.COLUMN_NAME_SRC_IMAGECLIENT, uriImage);
 
         String selection = ContractSql.Clientes.COLUMN_NAME_PK_ID + " =?";
         String[] selectionArgs = {id};
 
-        int result = db.update(ContractSql.Clientes.TABLE_NAME,values,selection,selectionArgs);
+        int result = db.update(ContractSql.Clientes.TABLE_NAME, values, selection, selectionArgs);
         db.close();
 
         return result > 0;
     }
 
-    public static boolean consultoraUpdate(Application context, String id,String nombre, String telefono, String direccion, String nivel){
+    public static boolean consultoraUpdate(Application context, String id, String nombre, String telefono, String direccion, String nivel) {
 
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
@@ -511,7 +511,7 @@ public class UtilsDml {
 
     }
 
-    public static boolean ClientDetail(Application context, String id, String[] result){
+    public static boolean ClientDetail(Application context, String id, String[] result) {
 
         boolean bIsOk = false;
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
@@ -577,19 +577,18 @@ public class UtilsDml {
     }
 
 
-
-    public static boolean altaCliente(Application context, String nombre, String direccion, String telefono, String ocupacion, Uri uriPhoto){
+    public static boolean altaCliente(Application context, String nombre, String direccion, String telefono, String ocupacion, Uri uriPhoto) {
 
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase sqLiteDatabase = adminSQLiteOpenHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        values.put(ContractSql.Clientes.COLUMN_NAME_SRC_IMAGECLIENT,uriPhoto.toString());
-        values.put(ContractSql.Clientes.COLUMN_NAME_NOMBRE,nombre);
-        values.put(ContractSql.Clientes.COLUMN_NAME_DIRECCION,direccion);
-        values.put(ContractSql.Clientes.COLUMN_NAME_TELEFONO,telefono);
-        values.put(ContractSql.Clientes.COLUMN_NAME_OCUPACION,ocupacion);
+        values.put(ContractSql.Clientes.COLUMN_NAME_SRC_IMAGECLIENT, uriPhoto.toString());
+        values.put(ContractSql.Clientes.COLUMN_NAME_NOMBRE, nombre);
+        values.put(ContractSql.Clientes.COLUMN_NAME_DIRECCION, direccion);
+        values.put(ContractSql.Clientes.COLUMN_NAME_TELEFONO, telefono);
+        values.put(ContractSql.Clientes.COLUMN_NAME_OCUPACION, ocupacion);
 
         long result = sqLiteDatabase.insert(ContractSql.Clientes.TABLE_NAME, null, values);
         sqLiteDatabase.close();

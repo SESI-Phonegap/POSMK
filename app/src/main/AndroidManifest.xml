@@ -116,7 +116,8 @@
             android:name=".Venta"
             android:label="@string/title_activity_venta"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".FormNuevaConsultora"
             android:screenOrientation="portrait"
@@ -133,7 +134,8 @@
         <activity
             android:name=".UserProfile"
             android:label="@string/title_activity_user_profile"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
     </application>
 
 </manifest>

@@ -243,13 +243,13 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
 
     static class TestViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView icon;
+        CircleImageView icon;
         TextView item;
         View mView;
 
         TestViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view_catalogo, parent, false));
-            icon = (ImageView) itemView.findViewById(R.id.list_icon_catalogo);
+            icon = (CircleImageView) itemView.findViewById(R.id.list_icon_catalogo);
             item = (TextView) itemView.findViewById(R.id.item_catalogo);
             mView = itemView;
         }

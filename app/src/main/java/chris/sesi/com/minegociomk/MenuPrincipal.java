@@ -52,7 +52,7 @@ public class MenuPrincipal extends AppCompatActivity
     private final static String ALTA = "alta";
     private CircleImageView circleImageViewUser;
     private static final int PICK_IMAGE = 100;
-    private Uri uriImageUser;
+
 
 
     @Override
@@ -114,32 +114,19 @@ public class MenuPrincipal extends AppCompatActivity
         nav_email = (TextView) headerView.findViewById(R.id.nav_email);
         circleImageViewUser = (CircleImageView) headerView.findViewById(R.id.imageView);
         //obtenerUsuario();
-        String[] result = new String[4];
-        if (UtilsDml.obtenerUsuario(getApplication(),result)){
-            _idEmail = (result[0]);
-            nav_email.setText(result[0]);
-            nav_user_name.setText(result[1]);
-            nav_user_category.setText(result[2]);
-            if (Uri.parse(result[3]) != null){
-                if (Uri.parse(result[3]).toString().equals("")){
-                    circleImageViewUser.setImageResource(R.drawable.femeie);
-                }else {
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(result[3]));
-                        circleImageViewUser.setImageBitmap(bitmap);
-                    //    circleImageViewUser.setImageURI(Uri.parse(result[3]));
-                    }catch (IOException e){e.printStackTrace();}
-                }
-            }
-        }
-
-
+        updateData();
         circleImageViewUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateData();
     }
 
     @Override
@@ -326,6 +313,27 @@ public class MenuPrincipal extends AppCompatActivity
             }
         });
 
+    }
+
+    public void updateData(){
+        String[] result = new String[4];
+        if (UtilsDml.obtenerUsuario(getApplication(),result)){
+            _idEmail = (result[0]);
+            nav_email.setText(result[0]);
+            nav_user_name.setText(result[1]);
+            nav_user_category.setText(result[2]);
+            if (Uri.parse(result[3]) != null){
+                if (Uri.parse(result[3]).toString().equals("")){
+                    circleImageViewUser.setImageResource(R.drawable.femeie);
+                }else {
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(result[3]));
+                        circleImageViewUser.setImageBitmap(bitmap);
+                        //    circleImageViewUser.setImageURI(Uri.parse(result[3]));
+                    }catch (IOException e){e.printStackTrace();}
+                }
+            }
+        }
     }
 
 }

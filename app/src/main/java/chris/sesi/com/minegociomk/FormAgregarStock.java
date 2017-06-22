@@ -4,7 +4,10 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -16,28 +19,31 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FormAgregarStock extends AppCompatActivity {
 
-    TextInputEditText addStock;
-    TextInputEditText minStock;
-    TextInputEditText pCompra;
-    TextInputEditText pVenta;
-    TextView cantActualStock;
-    TextView nombreProducto;
-    Button btn_agregar_stock;
+    private TextInputEditText addStock;
+    private TextInputEditText minStock;
+    private TextInputEditText pCompra;
+    private TextInputEditText pVenta;
+    private TextView cantActualStock;
+    private TextView nombreProducto;
+    private Button btn_agregar_stock;
+    private CircleImageView photoProduct;
 
-    List<String> _id;
-    List<String> _stock;
-    List<String> _minStock;
-    List<String> _pCompra;
-    List<String> _pVenta;
+    private List<String> _id;
+    private List<String> _stock;
+    private List<String> _minStock;
+    private List<String> _pCompra;
+    private List<String> _pVenta;
 
 
     @Override
@@ -48,6 +54,7 @@ public class FormAgregarStock extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        photoProduct = (CircleImageView) findViewById(R.id.circleImageViewProduct);
         addStock = (TextInputEditText) findViewById(R.id.item_stock);
         minStock = (TextInputEditText) findViewById(R.id.item_minstock);
         pCompra = (TextInputEditText) findViewById(R.id.item_compra);
@@ -64,8 +71,19 @@ public class FormAgregarStock extends AppCompatActivity {
         Intent intent = getIntent();
         final String id = intent.getStringExtra("ID_Product");
         String item_name = intent.getStringExtra("item_Name");
+        String item_photo = intent.getStringExtra("item_photo");
 
         final boolean result = consultaStock(id);
+        if (Uri.parse(item_photo).toString().equals("")){
+            photoProduct.setImageResource(R.drawable.ni_image);
+        } else {
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(item_photo));
+                photoProduct.setImageBitmap(bitmap);
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        }
         nombreProducto.setText(item_name);
 
         btn_agregar_stock.setOnClickListener(new View.OnClickListener() {
