@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -123,7 +124,11 @@ public class MenuPrincipal extends AppCompatActivity
                 if (Uri.parse(result[3]).toString().equals("")){
                     circleImageViewUser.setImageResource(R.drawable.femeie);
                 }else {
-                    circleImageViewUser.setImageURI(Uri.parse(result[3]));
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(result[3]));
+                        circleImageViewUser.setImageBitmap(bitmap);
+                    //    circleImageViewUser.setImageURI(Uri.parse(result[3]));
+                    }catch (IOException e){e.printStackTrace();}
                 }
             }
         }
@@ -179,6 +184,7 @@ public class MenuPrincipal extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
             Uri imageUri = data.getData();
+            Log.d("AAAA--",imageUri.toString());
             if (UtilsDml.updateImageUser(getApplication(), _idEmail, imageUri.toString())) {
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
@@ -322,56 +328,5 @@ public class MenuPrincipal extends AppCompatActivity
 
     }
 
-    public void obtenerUsuario() {
-
-        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(this);
-        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
-
-        //Columnas requeridas
-        String[] projection = {ContractSql.User.COLUMN_NAME_PK_ID,
-                ContractSql.User.COLUMN_NAME_NOMBRE,
-                ContractSql.User.COLUMN_NAME_NIVELMK,
-                ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER};
-        //Filtro del query WHERE
-        String selection = "";
-        String[] selectionArgs = {};
-
-        Cursor cursor = db.query(
-                ContractSql.User.TABLE_NAME,               //Nombre de la tabla
-                projection,                                 //Campos requeridos de la tabla
-                selection,                                 //Condicion Where
-                selectionArgs,                             // Argumentos de la condicion
-                null,
-                null,
-                null);
-
-        if (cursor.moveToFirst()) {
-            _idEmail = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PK_ID));
-            _name = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NOMBRE));
-            _nivelMk = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NIVELMK));
-            uriImageUser = Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER)));
-
-            if (uriImageUser != null) {
-                if (uriImageUser.toString().equals("")){
-                    circleImageViewUser.setImageResource(R.drawable.femeie);
-                }else {
-                    circleImageViewUser.setImageURI(uriImageUser);
-                }
-            }
-
-            nav_email.setText(_idEmail);
-            nav_user_name.setText(_name);
-            nav_user_category.setText(_nivelMk);
-            nav_user_category.setVisibility(View.VISIBLE);
-
-        } else {
-            Toast.makeText(this, getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this,MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-        cursor.close();
-        db.close();
-    }
 }
 

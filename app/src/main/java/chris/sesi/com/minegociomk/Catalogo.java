@@ -21,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -139,7 +140,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
             final String item = items.get(position);
             final String item_Id = itemsID.get(position);
             String item_photo = itemsPhoto.get(position);
-
+            Log.d("AAAA-", item_photo);
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -152,10 +153,16 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
             viewHolder.item.setVisibility(View.VISIBLE);
             viewHolder.icon.setVisibility(View.VISIBLE);
             viewHolder.item.setText(item);
-            if (Uri.parse(item_photo).toString().equals("")){
+            if (Uri.parse(item_photo).toString().equals("")) {
                 viewHolder.icon.setImageResource(R.drawable.ni_image);
-            }else {
-                viewHolder.icon.setImageURI(Uri.parse(item_photo));
+            } else {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(item_photo));
+                    viewHolder.icon.setImageBitmap(bitmap);
+                    // viewHolder.icon.setImageURI(Uri.parse(item_photo));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
