@@ -142,7 +142,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
             TestViewHolder viewHolder = (TestViewHolder) holder;
             final String item = items.get(position);
             final String item_Id = itemsID.get(position);
-            String item_photo = itemsPhoto.get(position);
+            final String item_photo = itemsPhoto.get(position);
             Log.d("AAAA-", item_photo);
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -181,6 +181,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
                     Intent intent = new Intent(context, FormAgregarStock.class);
                     intent.putExtra("ID_Product", item_Id);
                     intent.putExtra("item_Name", item);
+                    intent.putExtra("item_photo",item_photo);
                     context.startActivity(intent);
                 }
             });

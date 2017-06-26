@@ -3,8 +3,10 @@ package chris.sesi.com.minegociomk;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -27,15 +29,17 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import chris.sesi.com.utils.UtilsDml;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Inventario extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class Inventario extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private RecyclerView recyclerView;
     private List<String> items;
     private List<String> itemsID;
     private List<String> itemPhoto;
     private TestAdapter testAdapter;
+    private CircleImageView photoInventario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,20 +49,32 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_inventario);
+        photoInventario = (CircleImageView) findViewById(R.id.list_icon_inventario);
         items = new ArrayList<>();
         itemsID = new ArrayList<>();
         itemPhoto = new ArrayList<>();
 
-        if (!UtilsDml.consultaInventario(getApplication(),items,itemsID,itemPhoto)){
-            Toast.makeText(this,getString(R.string.sinInventario),Toast.LENGTH_LONG).show();
+        if (!UtilsDml.consultaInventario(getApplication(), items, itemsID, itemPhoto)) {
+            Toast.makeText(this, getString(R.string.sinInventario), Toast.LENGTH_LONG).show();
         }
         setUpRecyclerView();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, Catalogo.class);
+                context.startActivity(intent);
+
+            }
+        });
 
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
         final MenuItem item = menu.findItem(R.id.action_search);
@@ -67,8 +83,8 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void setUpRecyclerView(){
-        testAdapter = new TestAdapter(items,this);
+    public void setUpRecyclerView() {
+        testAdapter = new TestAdapter(items, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(testAdapter);
         recyclerView.setHasFixedSize(true);
@@ -83,14 +99,14 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
     public boolean onQueryTextChange(String newText) {
         newText = newText.toLowerCase();
         final List<String> filteredList = new ArrayList<>();
-        for(int i = 0; i < items.size(); i++){
+        for (int i = 0; i < items.size(); i++) {
             final String text = items.get(i).toLowerCase();
-            if(text.contains(newText)){
+            if (text.contains(newText)) {
                 filteredList.add(items.get(i));
             }
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(Inventario.this));
-        testAdapter = new TestAdapter(filteredList,Inventario.this);
+        testAdapter = new TestAdapter(filteredList, Inventario.this);
         recyclerView.setAdapter(testAdapter);
         testAdapter.notifyDataSetChanged();
         return true;
@@ -100,7 +116,7 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
         List<String> items;
         Context mContext;
 
-        TestAdapter(List<String> item_list,Context context){
+        TestAdapter(List<String> item_list, Context context) {
             items = item_list;
             mContext = context;
         }
@@ -117,31 +133,29 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
             final String item_Id = itemsID.get(position);
             final String item_photo = itemPhoto.get(position);
 
-            Log.d("DDDD--",item_photo);
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context,Catalogo.class);
-                    context.startActivity(intent);
-
-                }
-            });
-
             viewHolder.itemView.setBackgroundColor(Color.WHITE);
             viewHolder.item.setVisibility(View.VISIBLE);
             viewHolder.icon.setVisibility(View.VISIBLE);
             viewHolder.item.setText(item);
-            if (Uri.parse(item_photo).toString().equals("")) {
-                viewHolder.icon.setImageResource(R.drawable.ni_image);
-            } else {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(item_photo));
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (item_photo.equals("")) {
+                    viewHolder.icon.setImageResource(R.drawable.ni_image);
+                } else {
+                    Bitmap bitmap = BitmapFactory.decodeFile(item_photo);
                     viewHolder.icon.setImageBitmap(bitmap);
-                    // viewHolder.icon.setImageURI(Uri.parse(item_photo));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                }
+            } else {
+
+                if (Uri.parse(item_photo).toString().equals("")) {
+                    viewHolder.icon.setImageResource(R.drawable.ni_image);
+                } else {
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(item_photo));
+                        viewHolder.icon.setImageBitmap(bitmap);
+                        // viewHolder.icon.setImageURI(Uri.parse(item_photo));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -149,10 +163,10 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    Intent intent = new Intent(context,FormAgregarStock.class);
-                    intent.putExtra("ID_Product",item_Id);
-                    intent.putExtra("item_Name",item);
-                    intent.putExtra("item_photo",item_photo);
+                    Intent intent = new Intent(context, FormAgregarStock.class);
+                    intent.putExtra("ID_Product", item_Id);
+                    intent.putExtra("item_Name", item);
+                    intent.putExtra("item_photo", item_photo);
                     context.startActivity(intent);
                 }
             });
@@ -165,10 +179,6 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
         }
 
 
-
-
-
-
     }
 
     private static class TestViewHolder extends RecyclerView.ViewHolder {
@@ -177,7 +187,7 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
         TextView item;
         View mView;
 
-        TestViewHolder(ViewGroup parent){
+        TestViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view_inventario, parent, false));
             icon = (CircleImageView) itemView.findViewById(R.id.list_icon_inventario);
             item = (TextView) itemView.findViewById(R.id.item_inventario);

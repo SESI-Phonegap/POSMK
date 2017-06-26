@@ -13,7 +13,6 @@
         android:layout_height="50dp"
         android:scaleType="centerCrop"
         tools:src="@drawable/a_avator"
-        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
