@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import java.io.IOException;
 
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
+import chris.sesi.com.utils.ImageFilePath;
 import chris.sesi.com.utils.Utils;
 import chris.sesi.com.utils.UtilsDml;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -169,11 +171,22 @@ public class MenuPrincipal extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
+
+
             Uri imageUri = data.getData();
-            Log.d("AAAA--",imageUri.toString());
-            if (UtilsDml.updateImageUser(getApplication(), _idEmail, imageUri.toString())) {
+
+            String selectedImagePath;
+            if (Build.VERSION.SDK_INT >= 23){
+                selectedImagePath = ImageFilePath.getPath(getApplication(),imageUri);
+            }else {
+                selectedImagePath = imageUri.toString();
+            }
+
+            if (UtilsDml.updateImageUser(getApplication(), _idEmail, selectedImagePath)) {
                 try {
+
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                     circleImageViewUser.setImageBitmap(bitmap);
                 } catch (IOException e) {
@@ -322,15 +335,29 @@ public class MenuPrincipal extends AppCompatActivity
             nav_email.setText(result[0]);
             nav_user_name.setText(result[1]);
             nav_user_category.setText(result[2]);
-            if (Uri.parse(result[3]) != null){
-                if (Uri.parse(result[3]).toString().equals("")){
-                    circleImageViewUser.setImageResource(R.drawable.femeie);
-                }else {
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(result[3]));
+
+            if (Build.VERSION.SDK_INT >= 23){
+
+                    if (result[3].equals("")) {
+                        circleImageViewUser.setImageResource(R.drawable.femeie);
+                    } else {
+                        Bitmap bitmap = BitmapFactory.decodeFile(result[3]);
                         circleImageViewUser.setImageBitmap(bitmap);
-                        //    circleImageViewUser.setImageURI(Uri.parse(result[3]));
-                    }catch (IOException e){e.printStackTrace();}
+                    }
+
+            } else {
+                if (Uri.parse(result[3]) != null) {
+                    if (Uri.parse(result[3]).toString().equals("")) {
+                        circleImageViewUser.setImageResource(R.drawable.femeie);
+                    } else {
+                        try {
+                              Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(result[3]));
+                              circleImageViewUser.setImageBitmap(bitmap);
+                            //    circleImageViewUser.setImageURI(Uri.parse(result[3]));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         }

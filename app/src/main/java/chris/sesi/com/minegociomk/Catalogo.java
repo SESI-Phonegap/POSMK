@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -36,6 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import chris.sesi.com.utils.ImageFilePath;
 import chris.sesi.com.utils.UtilsDml;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -49,6 +51,7 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
     private static final int PICK_IMAGE = 100;
     private Uri uriPhotoResult;
     private CircleImageView photoCatalogo;
+    private String selectedImagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,13 +159,19 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
             if (Uri.parse(item_photo).toString().equals("")) {
                 viewHolder.icon.setImageResource(R.drawable.ni_image);
             } else {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(item_photo));
+                if (Build.VERSION.SDK_INT >= 23){
+                    Bitmap bitmap = BitmapFactory.decodeFile(item_photo);
                     viewHolder.icon.setImageBitmap(bitmap);
-                    // viewHolder.icon.setImageURI(Uri.parse(item_photo));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } else {
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(item_photo));
+                        viewHolder.icon.setImageBitmap(bitmap);
+                        // viewHolder.icon.setImageURI(Uri.parse(item_photo));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+
             }
 
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -211,10 +220,10 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
                         Snackbar.make(v, getResources().getString(R.string.Campovacio), Snackbar.LENGTH_LONG).show();
 
                     } else {
-                        if (uriPhotoResult == null) {
-                            uriPhotoResult = Uri.parse("");
+                        if (selectedImagePath == null) {
+                            selectedImagePath = "";
                         }
-                        UtilsDml.insertProduct(getApplication(), product, uriPhotoResult.toString());
+                        UtilsDml.insertProduct(getApplication(), product, selectedImagePath);
                         items.add(product);
                         UtilsDml.consultaCatalogo(getApplication(), items, itemsID, itemsPhoto);
                         setUpRecyclerView();
@@ -255,52 +264,6 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
         }
     }
 
-/*    public void consultaCatalogo(List<String> items, List<String> itemsid){
-        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(this);
-        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
-
-        String[] projection = {ContractSql.Producto.COLUMN_NAME_NOMBRE,
-                               ContractSql.Producto.COLUMN_NAME_PK_ID};
-
-        //Filtro del query WHERE
-        String selection = "";
-        String[] selectionArgs = {};
-
-        Cursor cursor = db.query(
-                ContractSql.Producto.TABLE_NAME,               //Nombre de la tabla
-                projection,                                 //Campos requeridos de la tabla
-                selection,                                 //Condicion Where
-                selectionArgs,                             // Argumentos de la condicion
-                null,
-                null,
-                null);
-
-        if (cursor.moveToFirst()) {
-            //Recorremos el cursor hasta que no haya más registros
-            do {
-                items.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_NOMBRE)));
-                itemsid.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_PK_ID)));
-
-            }while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-    }*/
-
- /*   public void insertProduct(String product){
-        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(this);
-        SQLiteDatabase db = adminSQLiteOpenHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(ContractSql.Producto.COLUMN_NAME_NOMBRE,product);
-        values.put(ContractSql.Producto.COLUMN_NAME_DESCRIPCION, "");
-        values.put(ContractSql.Producto.COLUMN_NAME_VENDIDOS,0);
-
-        db.insert(ContractSql.Producto.TABLE_NAME,null,values);
-        db.close();
-
-
-    }*/
 
     private void openGallery() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -323,6 +286,13 @@ public class Catalogo extends AppCompatActivity implements SearchView.OnQueryTex
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
             uriPhotoResult = data.getData();
+
+            if (Build.VERSION.SDK_INT >= 23) {
+                selectedImagePath = ImageFilePath.getPath(getApplication(), uriPhotoResult);
+            } else {
+                selectedImagePath = uriPhotoResult.toString();
+            }
+
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriPhotoResult);
                 photoCatalogo.setImageBitmap(bitmap);

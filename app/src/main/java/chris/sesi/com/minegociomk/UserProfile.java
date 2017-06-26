@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import chris.sesi.com.utils.ImageFilePath;
 import chris.sesi.com.utils.UtilsDml;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -77,17 +79,31 @@ public class UserProfile extends AppCompatActivity {
             edt_userMk.setText(result[3]);
             edt_passMk.setText(result[4]);
             edt_pass.setText(result[5]);
-            if (Uri.parse(result[6]) != null){
-                if (Uri.parse(result[6]).toString().equals("")){
+
+
+            if (Build.VERSION.SDK_INT >= 23){
+
+                if (result[6].equals("")) {
                     img_profile.setImageResource(R.drawable.femeie);
                 } else {
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(result[6]));
-                        img_profile.setImageBitmap(bitmap);
+                    Bitmap bitmap = BitmapFactory.decodeFile(result[6]);
+                    img_profile.setImageBitmap(bitmap);
+                }
 
-                    }catch (IOException e){e.printStackTrace();}
+            } else {
+                if (Uri.parse(result[6]) != null){
+                    if (Uri.parse(result[6]).toString().equals("")){
+                        img_profile.setImageResource(R.drawable.femeie);
+                    } else {
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(result[6]));
+                            img_profile.setImageBitmap(bitmap);
+
+                        }catch (IOException e){e.printStackTrace();}
+                    }
                 }
             }
+
 
         }
 
@@ -134,8 +150,15 @@ public class UserProfile extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
             Uri imageUri = data.getData();
-            Log.d("AAAA--",imageUri.toString());
-            if (UtilsDml.updateImageUser(getApplication(), _idEmail, imageUri.toString())) {
+
+            String selectedImagePath;
+            if (Build.VERSION.SDK_INT >= 23){
+                selectedImagePath = ImageFilePath.getPath(getApplication(),imageUri);
+            }else {
+                selectedImagePath = imageUri.toString();
+            }
+
+            if (UtilsDml.updateImageUser(getApplication(), _idEmail, selectedImagePath)) {
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                     img_profile.setImageBitmap(bitmap);
