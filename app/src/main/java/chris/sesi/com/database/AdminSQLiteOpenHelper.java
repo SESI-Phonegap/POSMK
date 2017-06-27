@@ -10,26 +10,26 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MiNegocioMk.db";
     private static final int DATABASE_VERSION = 1;
 
-    public AdminSQLiteOpenHelper(Context context){
-        super(context,DATABASE_NAME,null,DATABASE_VERSION);
+    public AdminSQLiteOpenHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         //----------------------TABLA USUARIO------------------
-        db.execSQL("CREATE TABLE "+ ContractSql.User.TABLE_NAME +" ("+
-                ContractSql.User.COLUMN_NAME_PK_ID + " TEXT PRIMARY KEY, "+
-                ContractSql.User.COLUMN_NAME_NOMBRE + " TEXT  , "+
-                ContractSql.User.COLUMN_NAME_NIVELMK + " TEXT  , "+
-                ContractSql.User.COLUMN_NAME_PASS_USER + " TEXT  , "+
-                ContractSql.User.COLUMN_NAME_USER_MK + " TEXT  , "+
-                ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER + " TEXT ,"+
+        db.execSQL("CREATE TABLE " + ContractSql.User.TABLE_NAME + " (" +
+                ContractSql.User.COLUMN_NAME_PK_ID + " TEXT PRIMARY KEY, " +
+                ContractSql.User.COLUMN_NAME_NOMBRE + " TEXT  , " +
+                ContractSql.User.COLUMN_NAME_NIVELMK + " TEXT  , " +
+                ContractSql.User.COLUMN_NAME_PASS_USER + " TEXT  , " +
+                ContractSql.User.COLUMN_NAME_USER_MK + " TEXT  , " +
+                ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER + " TEXT ," +
                 ContractSql.User.COLUMN_NAME_PASS_MK + " TEXT  );"
         );
 
         //---------------------TABLA CLIENTES ---------------------------
-        db.execSQL("CREATE TABLE " + ContractSql.Clientes.TABLE_NAME + " ("+
-                ContractSql.Clientes.COLUMN_NAME_PK_ID + " INTEGER PRIMARY KEY, "+
+        db.execSQL("CREATE TABLE " + ContractSql.Clientes.TABLE_NAME + " (" +
+                ContractSql.Clientes.COLUMN_NAME_PK_ID + " INTEGER PRIMARY KEY, " +
                 ContractSql.Clientes.COLUMN_NAME_SRC_IMAGECLIENT + " TEXT , " +
                 ContractSql.Clientes.COLUMN_NAME_NOMBRE + " TEXT  , " +
                 ContractSql.Clientes.COLUMN_NAME_DIRECCION + " TEXT  , " +
@@ -40,8 +40,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         //----------------------TABLA PRODUCTO---------------------------
         db.execSQL("CREATE TABLE " + ContractSql.Producto.TABLE_NAME + " (" +
                 ContractSql.Producto.COLUMN_NAME_PK_ID + " INTEGER PRIMARY KEY, " +
-                ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO + " TEXT , "+
-                ContractSql.Producto.COLUMN_NAME_NOMBRE + " TEXT  , "+
+                ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO + " TEXT , " +
+                ContractSql.Producto.COLUMN_NAME_NOMBRE + " TEXT  , " +
                 ContractSql.Producto.COLUMN_NAME_DESCRIPCION + " TEXT  , " +
                 ContractSql.Producto.COLUMN_NAME_VENDIDOS + " INTEGER   );"
         );
@@ -53,7 +53,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 ContractSql.Venta.COLUMN_NAME_TOTAL + " REAL  , " +
                 ContractSql.Venta.COLUMN_NAME_ESTATUS + " INTEGER NOY , " +
                 ContractSql.Venta.COLUMN_NAME_FK_ID_CLIENTE + " INTEGER  , " +
-                ContractSql.Venta.FOREIGN_KEY_ID_CLIENTE +");"
+                ContractSql.Venta.FOREIGN_KEY_ID_CLIENTE + ");"
         );
 
         //--------------------TABLA TICKET --------------------------------
@@ -90,17 +90,25 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         //--------------------------TABLA CONSULTORAS---------------------------
         db.execSQL("CREATE TABLE " + ContractSql.Consultoras.TABLE_NAME + " (" +
                 ContractSql.Consultoras.COLIMN_NAME_PK_ID + " INTEGER PRIMARY KEY, " +
+                ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA + " TEXT , " +
                 ContractSql.Consultoras.COLIMN_NAME_NOMBRE + " TEXT  , " +
                 ContractSql.Consultoras.COLIMN_NAME_NIVEL + " TEXT  , " +
                 ContractSql.Consultoras.COLIMN_NAME_DIRECCION + " TEXT  , " +
                 ContractSql.Consultoras.COLIMN_NAME_TELEFONO + " TEXT   );"
         );
 
+        //---------------------------TABLA UNIDADCONSULTORAS-----------------------------
+        db.execSQL("CREATE TABLE " + ContractSql.UnidadConsultora.TABLE_NAME + " (" +
+                ContractSql.UnidadConsultora.COLIMN_NAME_FK_ID_CONSULTORA + " INTEGER, " +
+                ContractSql.UnidadConsultora.COLIMN_NAME_FK_ID_UNIDAD_MK + " INTEGER, " +
+                ContractSql.UnidadConsultora.FOREIGN_KEY_ID_CONSULTORA + " , " +
+                ContractSql.UnidadConsultora.FOREIGN_KEY_ID_UNIDAD + ");"
+        );
+
         //----------------------------TABLA UNIDAD MK -----------------------------------
         db.execSQL("CREATE TABLE " + ContractSql.Unidad.TABLE_NAME + " (" +
-                ContractSql.Unidad.COLIMN_NAME_UNIDAD_MK + " TEXT  , " +
-                ContractSql.Unidad.COLIMN_NAME_FK_ID_CONSULTORA + " INTEGER  , " +
-                ContractSql.Unidad.FOREIGN_KEY_ID_CONSULTORA + " );"
+                ContractSql.Unidad.COLIMN_NAME_PK_ID + " INTEGER PRIMARY KEY, " +
+                ContractSql.Unidad.COLIMN_NAME_UNIDAD_MK + " TEXT  );"
         );
 
         //----------------------------TABLA PRESTAMO CONSULTORA -----------------------------
@@ -108,24 +116,23 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 ContractSql.PrestamoConsultora.COLIMN_NAME_PK_ID + " INTEGER PRIMARY KEY, " +
                 ContractSql.PrestamoConsultora.COLIMN_NAME_FECHA + " DATETIME  , " +
                 ContractSql.PrestamoConsultora.COLIMN_NAME_CANTIDAD + " INTEGER  , " +
-                ContractSql.PrestamoConsultora.COLIMN_NAME_ESTATUS +  " INTEGER  , " +
+                ContractSql.PrestamoConsultora.COLIMN_NAME_ESTATUS + " INTEGER  , " +
                 ContractSql.PrestamoConsultora.COLIMN_NAME_FK_ID_CONSULTORA + " INTEGER, " +
                 ContractSql.PrestamoConsultora.COLIMN_NAME_FK_ID_PRODUCTO + " INTEGER, " +
                 ContractSql.PrestamoConsultora.FOREIGN_KEY_ID_CONSULTORA + " , " +
                 ContractSql.PrestamoConsultora.FOREIGN_KEY_ID_PRODUCTO + " );"
         );
 
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('','Paso 1: Crema Protectora Restauradora para Manos Satin Hands®', '', 0);" );
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('','Paso 2: Crema Exfoliante Refinadora para Manos con Karité Satin Hands', '', 0);" );
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('','Paso 3: Crema para Manos con Karité Satin Hands', '', 0);" );
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('','Microexfoliante Refinador TimeWise', '', 0);" );
-        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " ("+ ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO  +", "+ ContractSql.Producto.COLUMN_NAME_NOMBRE + ", "+ ContractSql.Producto.COLUMN_NAME_DESCRIPCION  + ", "+ ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
-                + " VALUES ('','Minimizador de Poros TimeWise', '', 0);" );
-
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " (" + ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO + ", " + ContractSql.Producto.COLUMN_NAME_NOMBRE + ", " + ContractSql.Producto.COLUMN_NAME_DESCRIPCION + ", " + ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Paso 1: Crema Protectora Restauradora para Manos Satin Hands®', '', 0);");
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " (" + ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO + ", " + ContractSql.Producto.COLUMN_NAME_NOMBRE + ", " + ContractSql.Producto.COLUMN_NAME_DESCRIPCION + ", " + ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Paso 2: Crema Exfoliante Refinadora para Manos con Karité Satin Hands', '', 0);");
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " (" + ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO + ", " + ContractSql.Producto.COLUMN_NAME_NOMBRE + ", " + ContractSql.Producto.COLUMN_NAME_DESCRIPCION + ", " + ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Paso 3: Crema para Manos con Karité Satin Hands', '', 0);");
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " (" + ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO + ", " + ContractSql.Producto.COLUMN_NAME_NOMBRE + ", " + ContractSql.Producto.COLUMN_NAME_DESCRIPCION + ", " + ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Microexfoliante Refinador TimeWise', '', 0);");
+        db.execSQL("INSERT INTO " + ContractSql.Producto.TABLE_NAME + " (" + ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO + ", " + ContractSql.Producto.COLUMN_NAME_NOMBRE + ", " + ContractSql.Producto.COLUMN_NAME_DESCRIPCION + ", " + ContractSql.Producto.COLUMN_NAME_VENDIDOS + ") "
+                + " VALUES ('','Minimizador de Poros TimeWise', '', 0);");
 
 
     }

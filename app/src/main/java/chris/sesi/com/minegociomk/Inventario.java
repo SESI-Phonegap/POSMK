@@ -151,6 +151,8 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
                 viewHolder.item.setTextColor(getResources().getColor(R.color.red));
                 viewHolder.item_cant.setTextColor(getResources().getColor(R.color.red));
                 viewHolder.item_cantMin.setTextColor(getResources().getColor(R.color.red));
+
+             //   viewHolder.itemView.setBackgroundColor(getResources().getColor(R.color.rojoFondo));
             }
             if (Build.VERSION.SDK_INT >= 23) {
                 if (item_photo.equals("")) {

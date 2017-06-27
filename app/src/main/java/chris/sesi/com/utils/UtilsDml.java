@@ -19,6 +19,7 @@ import chris.sesi.com.database.ContractSql;
 import chris.sesi.com.minegociomk.MainActivity;
 import chris.sesi.com.minegociomk.MenuPrincipal;
 import chris.sesi.com.minegociomk.R;
+import chris.sesi.com.model.ModelConsultora;
 
 
 public class UtilsDml {
@@ -600,6 +601,115 @@ public class UtilsDml {
         values.put(ContractSql.Clientes.COLUMN_NAME_OCUPACION, ocupacion);
 
         long result = sqLiteDatabase.insert(ContractSql.Clientes.TABLE_NAME, null, values);
+        sqLiteDatabase.close();
+
+        return result > 0;
+    }
+
+
+    public static boolean consultaMiUnidad(Application context, List<ModelConsultora> items) {
+        boolean bIsOk = false;
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        String[] projection = {ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_NOMBRE,
+                ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_NIVEL,
+                ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_TELEFONO,
+                ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA,
+                ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_PK_ID,
+                ContractSql.UnidadConsultora.TABLE_NAME + "." + ContractSql.UnidadConsultora.COLIMN_NAME_FK_ID_UNIDAD_MK};
+
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(ContractSql.Consultoras.TABLE_NAME + " INNER JOIN " + ContractSql.Unidad.TABLE_NAME + " ON " +
+                ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_PK_ID + " = " +
+                ContractSql.UnidadConsultora.TABLE_NAME + "." + ContractSql.UnidadConsultora.COLIMN_NAME_FK_ID_CONSULTORA);
+
+
+        //Filtro del query WHERE
+        // String selection =  ContractSql.Producto.TABLE_NAME+"."+ ContractSql.Producto.COLUMN_NAME_PK_ID + " =? ";
+        //   String[] selectionArgs = {ContractSql.Inventario.TABLE_NAME+"."+ ContractSql.Inventario.COLUMN_NAME_FK_ID_PRODUCTO};
+        String orderBy = ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_NOMBRE + " ASC";
+        Cursor cursor = queryBuilder.query(
+                db,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                orderBy);
+
+   /*     Cursor cursor = db.query(
+                ContractSql.Producto.TABLE_NAME,               //Nombre de la tabla
+                projection,                                 //Campos requeridos de la tabla
+                selection,                                 //Condicion Where
+                selectionArgs,                             // Argumentos de la condicion
+                null,
+                null,
+                null);
+*/
+        if (cursor.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            bIsOk = true;
+            do {
+                items.add(new ModelConsultora(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_PK_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NOMBRE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NIVEL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_TELEFONO))));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return bIsOk;
+    }
+
+    public static boolean checkUnidadExist(Application context) {
+        boolean bIsOk = false;
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
+
+        //Columnas requeridas
+        String[] projection = {ContractSql.Unidad.COLIMN_NAME_PK_ID};
+        //Filtro del query WHERE
+        String selection = "";
+        String[] selectionArgs = {};
+
+        //   String sortOrder = "";  // Orden de la consulta
+
+        Cursor cursor = db.query(
+                ContractSql.Unidad.TABLE_NAME,               //Nombre de la tabla
+                projection,                                 //Campos requeridos de la tabla
+                selection,                                 //Condicion Where
+                selectionArgs,                             // Argumentos de la condicion
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            db.close();
+            bIsOk = true;
+
+        } else {
+            cursor.close();
+            db.close();
+        }
+
+        return bIsOk;
+    }
+
+    public static boolean altaUnidad(Application context, String nombre) {
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        SQLiteDatabase sqLiteDatabase = adminSQLiteOpenHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(ContractSql.Unidad.COLIMN_NAME_UNIDAD_MK, nombre);
+
+        long result = sqLiteDatabase.insert(ContractSql.Unidad.TABLE_NAME, null, values);
         sqLiteDatabase.close();
 
         return result > 0;

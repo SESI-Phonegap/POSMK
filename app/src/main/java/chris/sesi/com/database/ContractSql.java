@@ -79,17 +79,26 @@ public final class ContractSql {
    public static class Consultoras{
        public static final String TABLE_NAME = "consultoras";
        public static final String COLIMN_NAME_PK_ID = "id_consultora";
+       public static final String COLIMN_NAME_IMG_CONSULTORA = "img_consultora";
        public static final String COLIMN_NAME_NOMBRE = "nombre";
        public static final String COLIMN_NAME_NIVEL = "nivel";
        public static final String COLIMN_NAME_TELEFONO = "telefono";
        public static final String COLIMN_NAME_DIRECCION = "direccion";
    }
 
-    public static class Unidad{
+    public static class UnidadConsultora{
         public static final String TABLE_NAME = "unidad";
-        public static final String COLIMN_NAME_UNIDAD_MK = "unidad";
+        //public static final String COLIMN_NAME_PK_ID = "id_unidad";
+        public static final String COLIMN_NAME_FK_ID_UNIDAD_MK = "id_unidad";
         public static final String COLIMN_NAME_FK_ID_CONSULTORA = "id_consultora";
         public static final String FOREIGN_KEY_ID_CONSULTORA = "FOREIGN KEY (id_consultora) REFERENCES consultoras(id_consultora)";
+        public static final String FOREIGN_KEY_ID_UNIDAD = "FOREIGN KEY (id_unidad) REFERENCES unidad(id_unidad)";
+    }
+
+    public static class Unidad{
+        public static final String TABLE_NAME = "unidad";
+        public static final String COLIMN_NAME_PK_ID = "id_unidad";
+        public static final String COLIMN_NAME_UNIDAD_MK = "unidad";
     }
 
     public static class PrestamoConsultora{

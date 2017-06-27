@@ -23,7 +23,22 @@
             android:icon="@drawable/ic_group_black_24dp"
             android:title="@string/Consultoras"/>
 
+        <item
+            android:id="@+id/miUnidad"
+            android:icon="@drawable/ic_group_black_24dp"
+            android:title="@string/miUnidad"/>
+
     </group>
+
+    <item android:title="@string/compartir">
+        <menu>
+            <item
+                android:id="@+id/nav_compartir"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/compartirAmigo" />
+
+        </menu>
+    </item>
 
     <item android:title="@string/datosdeusuario">
         <menu>
@@ -38,14 +53,6 @@
         </menu>
     </item>
 
-    <item android:title="@string/compartir">
-        <menu>
-            <item
-                android:id="@+id/nav_compartir"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/compartirAmigo" />
 
-        </menu>
-    </item>
 
 </menu>

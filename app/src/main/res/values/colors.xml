@@ -11,4 +11,5 @@
     <color name="negro">#000000</color>
     <color name="grey_dark">#AFAFAF</color>
     <color name="red">#FF0000</color>
+    <color name="rojoFondo">#90FF0000</color>
 </resources>

@@ -39,6 +39,7 @@
     <string name="ErrorActualiza">¡Ocurrior un error al actualizar los datos!, intente de nuevo.</string>
     <string name="RegistroExitoso">¡Registro exitoso!</string>
     <string name="Consultoras">Consultoras</string>
+    <string name="miUnidad">Mi unidad</string>
     <string name="Campovacio">Campo vacio, inserta un dato valido</string>
     <string name="NuevoProducto">Nuevo Producto</string>
     <string name="Cancelar">Cancelar</string>
@@ -84,5 +85,7 @@
 
     <string name="cantidad">Stock: %1$s</string>
     <string name="cantidadMin">Stock Minimo: %1$s</string>
+
+    <string name="registraUnidad">Registra tu unidad</string>
 
 </resources>
