@@ -82,5 +82,7 @@
     <string name="title_activity_consultora_list">ConsultoraList</string>
     <string name="title_activity_user_profile">UserProfile</string>
 
+    <string name="cantidad">Stock: %1$s</string>
+    <string name="cantidadMin">Stock Minimo: %1$s</string>
 
 </resources>

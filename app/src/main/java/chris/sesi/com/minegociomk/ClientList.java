@@ -4,10 +4,14 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -25,11 +29,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import chris.sesi.com.utils.Utils;
 import chris.sesi.com.utils.UtilsDml;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ClientList extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -37,6 +43,7 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
     private List<String> items;
     public static List<String> itemsID;
     public static List<String> item_tel;
+    private List<String> item_photo;
     private TestAdapter testAdapter;
     private final static String ORIGIN_ACTIVITY = "origin_activity";
     private final static String ACTUALIZAR = "actualizar";
@@ -59,7 +66,8 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
         items = new ArrayList<>();
         itemsID = new ArrayList<>();
         item_tel = new ArrayList<>();
-        UtilsDml.consultaClientes(getApplication(),items, item_tel, itemsID);
+        item_photo = new ArrayList<>();
+        UtilsDml.consultaClientes(getApplication(),items, item_tel, itemsID, item_photo);
         setUpRecyclerView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_nuevo_cliente);
@@ -153,6 +161,7 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
             final String item = items.get(position);
             final String item_telefono = item_tel.get(position);
             final String item_Id = itemsID.get(position);
+            String itemPhoto = item_photo.get(position);
 
             if (itemsPendingRemoval.contains(item)) {
                 // we need to show the "undo" state of the row
@@ -168,7 +177,31 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
                 viewHolder.titleTextView.setVisibility(View.VISIBLE);
                 viewHolder.imageView.setVisibility(View.VISIBLE);
                 viewHolder.telefonoTextView.setVisibility(View.VISIBLE);
-                viewHolder.imageView.setImageResource(R.drawable.ic_person_black_24dp);
+
+                if (Build.VERSION.SDK_INT >= 23){
+                    if (itemPhoto != null){
+                        if (itemPhoto.equals("")){
+                            viewHolder.imageView.setImageResource(R.drawable.ic_person_black_24dp);
+                        }else {
+                            Bitmap bitmap = BitmapFactory.decodeFile(itemPhoto);
+                            viewHolder.imageView.setImageBitmap(bitmap);
+                        }
+                    }
+
+                } else {
+                    if (Uri.parse(itemPhoto).toString().equals("")) {
+                        viewHolder.imageView.setImageResource(R.drawable.ic_person_black_24dp);
+                    } else {
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(itemPhoto));
+                            viewHolder.imageView.setImageBitmap(bitmap);
+                            // viewHolder.icon.setImageURI(Uri.parse(item_photo));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
                 viewHolder.titleTextView.setText(item);
                 viewHolder.telefonoTextView.setText(item_telefono);
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -265,14 +298,14 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
 
         TextView titleTextView;
         View mView;
-        ImageView imageView;
+        CircleImageView imageView;
         TextView telefonoTextView;
 
         TestViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view, parent, false));
             titleTextView = (TextView) itemView.findViewById(R.id.clienta);
             //  undoButton = (Button) itemView.findViewById(R.id.undo_button);
-            imageView = (ImageView) itemView.findViewById(R.id.list_avatar_clienta);
+            imageView = (CircleImageView) itemView.findViewById(R.id.list_avatar_clienta);
             telefonoTextView = (TextView) itemView.findViewById(R.id.cliente_tel);
             mView = itemView;
         }

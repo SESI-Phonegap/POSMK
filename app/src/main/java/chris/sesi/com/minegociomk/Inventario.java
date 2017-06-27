@@ -38,6 +38,8 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
     private List<String> items;
     private List<String> itemsID;
     private List<String> itemPhoto;
+    private List<String> itemCant;
+    private List<String> itemCantMin;
     private TestAdapter testAdapter;
     private CircleImageView photoInventario;
 
@@ -53,8 +55,10 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
         items = new ArrayList<>();
         itemsID = new ArrayList<>();
         itemPhoto = new ArrayList<>();
+        itemCant = new ArrayList<>();
+        itemCantMin = new ArrayList<>();
 
-        if (!UtilsDml.consultaInventario(getApplication(), items, itemsID, itemPhoto)) {
+        if (!UtilsDml.consultaInventario(getApplication(), items, itemsID, itemPhoto, itemCant, itemCantMin)) {
             Toast.makeText(this, getString(R.string.sinInventario), Toast.LENGTH_LONG).show();
         }
         setUpRecyclerView();
@@ -132,11 +136,22 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
             final String item = items.get(position);
             final String item_Id = itemsID.get(position);
             final String item_photo = itemPhoto.get(position);
+            String item_Cant = itemCant.get(position);
+            String item_Cant_Min = itemCantMin.get(position);
+            int cant = Integer.parseInt(item_Cant);
+            int cantMin = Integer.parseInt(item_Cant_Min);
 
             viewHolder.itemView.setBackgroundColor(Color.WHITE);
             viewHolder.item.setVisibility(View.VISIBLE);
             viewHolder.icon.setVisibility(View.VISIBLE);
             viewHolder.item.setText(item);
+            viewHolder.item_cant.setText(getString(R.string.cantidad, item_Cant));
+            viewHolder.item_cantMin.setText(getString(R.string.cantidadMin, item_Cant_Min));
+            if (cant <= cantMin){
+                viewHolder.item.setTextColor(getResources().getColor(R.color.red));
+                viewHolder.item_cant.setTextColor(getResources().getColor(R.color.red));
+                viewHolder.item_cantMin.setTextColor(getResources().getColor(R.color.red));
+            }
             if (Build.VERSION.SDK_INT >= 23) {
                 if (item_photo.equals("")) {
                     viewHolder.icon.setImageResource(R.drawable.ni_image);
@@ -185,12 +200,16 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
 
         CircleImageView icon;
         TextView item;
+        TextView item_cant;
+        TextView item_cantMin;
         View mView;
 
         TestViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view_inventario, parent, false));
             icon = (CircleImageView) itemView.findViewById(R.id.list_icon_inventario);
             item = (TextView) itemView.findViewById(R.id.item_inventario);
+            item_cant = (TextView) itemView.findViewById(R.id.item_cant_Inventario);
+            item_cantMin = (TextView) itemView.findViewById(R.id.item_cantMin_Inventario);
             mView = itemView;
         }
     }

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import chris.sesi.com.utils.ImageFilePath;
 import chris.sesi.com.utils.Utils;
 import chris.sesi.com.utils.UtilsDml;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -42,6 +44,7 @@ public class FormNuevoCliente extends AppCompatActivity {
     private static final int PICK_IMAGE_UPDATE = 111;
     private Uri uriPhotoResult;
     private Uri uriPhotoClient;
+    private String selectedImagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +77,24 @@ public class FormNuevoCliente extends AppCompatActivity {
                 direccion_clinete.setText(result[2]);
                 ocupacion_cliente.setText(result[3]);
 
-                if (Uri.parse(result[4]) != null){
-                    if (Uri.parse(result[4]).toString().equals("")){
+                if (Build.VERSION.SDK_INT >= 23){
+                    if (result[4].equals("")){
                         photoClient.setImageResource(R.drawable.femeie);
                     } else {
-                        photoClient.setImageURI(Uri.parse(result[4]));
+                        Bitmap bitmap = BitmapFactory.decodeFile(result[4]);
+                        photoClient.setImageBitmap(bitmap);
+                    }
+
+                } else {
+                    if (Uri.parse(result[4]) != null){
+                        if (Uri.parse(result[4]).toString().equals("")){
+                            photoClient.setImageResource(R.drawable.femeie);
+                        } else {
+                            photoClient.setImageURI(Uri.parse(result[4]));
+                        }
                     }
                 }
+
 
             }
 
@@ -110,12 +124,12 @@ public class FormNuevoCliente extends AppCompatActivity {
             Snackbar.make(v, getResources().getString(R.string.camposVacios), Snackbar.LENGTH_LONG).show();
 
         } else {
-            if (uriPhotoResult == null){
-                uriPhotoResult = Uri.parse("");
+            if (selectedImagePath == null){
+                selectedImagePath = "";
             }
             if (UtilsDml.altaCliente(getApplication(), nombre_cliente.getText().toString(),
                     direccion_clinete.getText().toString(), telefono_cliente.getText().toString(),
-                    ocupacion_cliente.getText().toString(),uriPhotoResult)){
+                    ocupacion_cliente.getText().toString(),Uri.parse(selectedImagePath))){
                 Toast.makeText(this,getString(R.string.RegistroExitoso), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(v.getContext(), ClientList.class);
                 startActivity(intent);
@@ -193,6 +207,13 @@ public class FormNuevoCliente extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
             uriPhotoResult = data.getData();
+
+            if (Build.VERSION.SDK_INT >= 23) {
+                selectedImagePath = ImageFilePath.getPath(getApplication(), uriPhotoResult);
+            } else {
+                selectedImagePath = uriPhotoResult.toString();
+            }
+
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriPhotoResult);
                 photoClient.setImageBitmap(bitmap);
@@ -202,10 +223,17 @@ public class FormNuevoCliente extends AppCompatActivity {
 
         } else if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_UPDATE){
             uriPhotoResult = data.getData();
+
+            if (Build.VERSION.SDK_INT >= 23) {
+                selectedImagePath = ImageFilePath.getPath(getApplication(), uriPhotoResult);
+            } else {
+                selectedImagePath = uriPhotoResult.toString();
+            }
+
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriPhotoResult);
                 photoClient.setImageBitmap(bitmap);
-                if (!UtilsDml.updateImageClient(getApplication(),id,uriPhotoResult.toString())){
+                if (!UtilsDml.updateImageClient(getApplication(),id,selectedImagePath)){
                     Toast.makeText(this,getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
                 }
             }catch (IOException e){

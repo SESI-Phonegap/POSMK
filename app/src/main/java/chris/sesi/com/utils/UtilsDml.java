@@ -308,7 +308,9 @@ public class UtilsDml {
 
     }
 
-    public static boolean consultaInventario(Application context, List<String> items, List<String> itemId, List<String> itemPhoto) {
+    public static boolean consultaInventario(Application context, List<String> items,
+                                             List<String> itemId, List<String> itemPhoto,
+                                             List<String> itemCant, List<String> itemCantMin) {
         boolean bIsOk = false;
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
@@ -316,6 +318,8 @@ public class UtilsDml {
         String[] projection = {ContractSql.Producto.TABLE_NAME + "." + ContractSql.Producto.COLUMN_NAME_NOMBRE,
                 ContractSql.Inventario.TABLE_NAME + "." + ContractSql.Inventario.COLUMN_NAME_FK_ID_PRODUCTO,
                 ContractSql.Inventario.TABLE_NAME + "." + ContractSql.Inventario.COLUMN_NAME_STOCK,
+                ContractSql.Inventario.TABLE_NAME + "." + ContractSql.Inventario.COLUMN_NAME_STOCK,
+                ContractSql.Inventario.TABLE_NAME + "." + ContractSql.Inventario.COLUMN_NAME_MIN_STOCK,
                 ContractSql.Producto.TABLE_NAME + "." + ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO};
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
@@ -352,6 +356,8 @@ public class UtilsDml {
                 items.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_NOMBRE)));
                 itemId.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Inventario.COLUMN_NAME_FK_ID_PRODUCTO)));
                 itemPhoto.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Producto.COLUMN_NAME_IMG_PRODUCTO)));
+                itemCant.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Inventario.COLUMN_NAME_STOCK)));
+                itemCantMin.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Inventario.COLUMN_NAME_MIN_STOCK)));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -438,7 +444,8 @@ public class UtilsDml {
     }
 
 
-    public static void consultaClientes(Application context, List<String> items, List<String> itemTel, List<String> itemId) {
+    public static void consultaClientes(Application context, List<String> items, List<String> itemTel,
+                                        List<String> itemId, List<String> item_photo) {
 
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
@@ -446,6 +453,7 @@ public class UtilsDml {
         //Columnas requeridas
         String[] projection = {ContractSql.Clientes.COLUMN_NAME_PK_ID,
                 ContractSql.Clientes.COLUMN_NAME_NOMBRE,
+                ContractSql.Clientes.COLUMN_NAME_SRC_IMAGECLIENT,
                 ContractSql.Clientes.COLUMN_NAME_TELEFONO};
         //Filtro del query WHERE
         String selection = "";
@@ -466,6 +474,7 @@ public class UtilsDml {
                 itemId.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_PK_ID)));
                 items.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_NOMBRE)));
                 itemTel.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_TELEFONO)));
+                item_photo.add(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Clientes.COLUMN_NAME_SRC_IMAGECLIENT)));
 
             } while (cursor.moveToNext());
         }
