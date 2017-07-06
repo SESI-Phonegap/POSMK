@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="@string/registraUnidad"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
@@ -21,14 +23,13 @@
 
     <EditText
         android:id="@+id/editTextMiUnidad"
+        android:labelFor="@id/editTextMiUnidad"
         android:layout_width="0dp"
-        android:layout_height="@dimen/sizeHeightEditTex"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:background="@drawable/custom_edit_text_form"
+        style="@style/EditTextFormStyle"
         android:text="@string/Nombre"
+        android:textAlignment="center"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
         android:layout_marginLeft="8dp"
@@ -42,23 +43,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Cancelar"
+        android:textColor="@color/colorAccent"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/editTextMiUnidad"
         android:layout_marginStart="8dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <Button
         android:id="@+id/btn_guardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Guardar"
+        android:textColor="@color/colorAccent"
         app:layout_constraintRight_toLeftOf="@+id/btn_cancel"
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_cancel" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/btn_cancel"
+        style="?android:attr/borderlessButtonStyle"
+        app:layout_constraintHorizontal_bias="0.94" />
 
 
 </android.support.constraint.ConstraintLayout>

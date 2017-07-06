@@ -2,4 +2,5 @@
 <resources>
     <dimen name="sizeHeightEditTex">40dp</dimen>
     <dimen name="sizeHeighButton">55dp</dimen>
+    <dimen name="sizeStart">45dp</dimen>
 </resources>

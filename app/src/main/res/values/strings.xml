@@ -23,7 +23,8 @@
     <string name="action_settings">Settings</string>
     <string name="Ventas">Ventas</string>
     <string name="inventario">Inventario</string>
-    <string name="sinInventario">No cuentas con articulos en tu inventario</string>
+    <string name="sinInventario">No cuentas con articulos en tu inventario.</string>
+    <string name="sinConsultorasUnidad">No cuentas con consultoras en tu unidad.</string>
     <string name="clientes">Clientes</string>
     <string name="catalogo">Catalogo</string>
     <string name="datosdeusuario">Datos de usuario</string>
@@ -87,5 +88,6 @@
     <string name="cantidadMin">Stock Minimo: %1$s</string>
 
     <string name="registraUnidad">Registra tu unidad</string>
+    <string name="title_activity_mi_unidad">MiUnidad</string>
 
 </resources>

@@ -3,4 +3,5 @@
     <dimen name="sizeHeightEditTex">40dp</dimen>
     <dimen name="sizeHeighButton">55dp</dimen>
     <dimen name="sizeTextRegistrarse">18sp</dimen>
+    <dimen name="sizeStart">45dp</dimen>
 </resources>
