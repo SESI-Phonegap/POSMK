@@ -255,6 +255,11 @@ public class MenuPrincipal extends AppCompatActivity
                 startActivity(intent);
                 break;
 
+            case R.id.miUnidad:
+                intent = new Intent(fabVender.getContext(), MiUnidad.class);
+                startActivity(intent);
+                break;
+
             case R.id.nav_user_profile:
                 intent = new Intent(this,UserProfile.class);
                 startActivity(intent);

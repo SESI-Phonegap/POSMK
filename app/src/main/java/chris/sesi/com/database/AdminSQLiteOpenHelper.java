@@ -97,6 +97,12 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 ContractSql.Consultoras.COLIMN_NAME_TELEFONO + " TEXT   );"
         );
 
+        //----------------------------TABLA UNIDAD MK -----------------------------------
+        db.execSQL("CREATE TABLE " + ContractSql.Unidad.TABLE_NAME + " (" +
+                ContractSql.Unidad.COLIMN_NAME_PK_ID + " INTEGER PRIMARY KEY, " +
+                ContractSql.Unidad.COLIMN_NAME_UNIDAD_MK + " TEXT  );"
+        );
+
         //---------------------------TABLA UNIDADCONSULTORAS-----------------------------
         db.execSQL("CREATE TABLE " + ContractSql.UnidadConsultora.TABLE_NAME + " (" +
                 ContractSql.UnidadConsultora.COLIMN_NAME_FK_ID_CONSULTORA + " INTEGER, " +
@@ -105,11 +111,6 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 ContractSql.UnidadConsultora.FOREIGN_KEY_ID_UNIDAD + ");"
         );
 
-        //----------------------------TABLA UNIDAD MK -----------------------------------
-        db.execSQL("CREATE TABLE " + ContractSql.Unidad.TABLE_NAME + " (" +
-                ContractSql.Unidad.COLIMN_NAME_PK_ID + " INTEGER PRIMARY KEY, " +
-                ContractSql.Unidad.COLIMN_NAME_UNIDAD_MK + " TEXT  );"
-        );
 
         //----------------------------TABLA PRESTAMO CONSULTORA -----------------------------
         db.execSQL("CREATE TABLE " + ContractSql.PrestamoConsultora.TABLE_NAME + " (" +

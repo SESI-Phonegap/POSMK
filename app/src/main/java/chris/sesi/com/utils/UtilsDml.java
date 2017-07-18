@@ -617,12 +617,12 @@ public class UtilsDml {
                 ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_TELEFONO,
                 ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA,
                 ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_PK_ID,
-                ContractSql.UnidadConsultora.TABLE_NAME + "." + ContractSql.UnidadConsultora.COLIMN_NAME_FK_ID_UNIDAD_MK};
+                ContractSql.Unidad.TABLE_NAME + "." + ContractSql.Unidad.COLIMN_NAME_PK_ID};
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(ContractSql.Consultoras.TABLE_NAME + " INNER JOIN " + ContractSql.Unidad.TABLE_NAME + " ON " +
                 ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_PK_ID + " = " +
-                ContractSql.UnidadConsultora.TABLE_NAME + "." + ContractSql.UnidadConsultora.COLIMN_NAME_FK_ID_CONSULTORA);
+                ContractSql.Unidad.TABLE_NAME + "." + ContractSql.Unidad.COLIMN_NAME_PK_ID);
 
 
         //Filtro del query WHERE

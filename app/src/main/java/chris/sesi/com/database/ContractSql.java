@@ -87,7 +87,7 @@ public final class ContractSql {
    }
 
     public static class UnidadConsultora{
-        public static final String TABLE_NAME = "unidad";
+        public static final String TABLE_NAME = "unidadConsultora";
         //public static final String COLIMN_NAME_PK_ID = "id_unidad";
         public static final String COLIMN_NAME_FK_ID_UNIDAD_MK = "id_unidad";
         public static final String COLIMN_NAME_FK_ID_CONSULTORA = "id_consultora";
