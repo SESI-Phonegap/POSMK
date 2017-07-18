@@ -1,6 +1,13 @@
 package chris.sesi.com.minegociomk;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +16,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
+import chris.sesi.com.utils.ImageFilePath;
 import chris.sesi.com.utils.UtilsDml;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FormNuevaConsultora extends AppCompatActivity {
     private EditText edtNombre, edtNivel, edtDireccion, edtTelefono;
@@ -18,6 +29,11 @@ public class FormNuevaConsultora extends AppCompatActivity {
     private final static String ALTA = "alta";
     private Intent intent;
     private String id = "";
+    private CircleImageView photoConsultora;
+    private static final int PICK_IMAGE = 100;
+    private static final int PICK_IMAGE_UPDATE = 111;
+    private Uri uriPhotoResult;
+    private String selectedImagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +47,19 @@ public class FormNuevaConsultora extends AppCompatActivity {
         TextView tvTitle = (TextView) findViewById(R.id.registro_title);
         intent = getIntent();
 
+        photoConsultora = (CircleImageView) findViewById(R.id.imgConsultora);
+
         if (intent.getStringExtra(ORIGIN_ACTIVITY).equals(ACTUALIZAR)){
             id = intent.getStringExtra("ID");
-            if (!UtilsDml.ConsultoraDetail(getApplication(),id,edtNombre,edtTelefono,edtDireccion,edtNivel)){
+            if (!UtilsDml.ConsultoraDetail(getApplication(),id,edtNombre,edtTelefono,edtDireccion,edtNivel,photoConsultora)){
                 Toast.makeText(this,getString(R.string.errorRegistro),Toast.LENGTH_LONG).show();
                 onBackPressed();
             }
             btnGuardar.setText(getString(R.string.Actualizar));
             tvTitle.setText(getString(R.string.Actualizar));
+            photoConsultora.setOnClickListener(updatePhoto);
+        } else {
+            photoConsultora.setOnClickListener(altaPhoto);
         }
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +80,7 @@ public class FormNuevaConsultora extends AppCompatActivity {
         } else {
             if (UtilsDml.altaConsultora(getApplication(), edtNombre.getText().toString(),
                     edtNivel.getText().toString(), edtDireccion.getText().toString(),
-                    edtTelefono.getText().toString())){
+                    edtTelefono.getText().toString(),Uri.parse(selectedImagePath))){
                 Toast.makeText(getApplication(), getString(R.string.RegistroExitoso), Toast.LENGTH_LONG).show();
             }else {
                 Toast.makeText(getApplication(), getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
@@ -80,6 +101,93 @@ public class FormNuevaConsultora extends AppCompatActivity {
                 finish();
             } else {
                 Toast.makeText(this,getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    View.OnClickListener updatePhoto = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            openGalleryUpdate();
+        }
+    };
+
+    View.OnClickListener altaPhoto = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            openGallery();
+        }
+    };
+
+    private void openGallery() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(FormNuevaConsultora.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(FormNuevaConsultora.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 999);
+
+            } else {
+                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(gallery, PICK_IMAGE);
+            }
+        }else {
+            Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(gallery, PICK_IMAGE);
+        }
+
+    }
+
+    private void openGalleryUpdate() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(FormNuevaConsultora.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(FormNuevaConsultora.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 999);
+
+            } else {
+                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(gallery, PICK_IMAGE_UPDATE);
+            }
+        }else {
+            Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(gallery, PICK_IMAGE_UPDATE);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
+            uriPhotoResult = data.getData();
+
+            if (Build.VERSION.SDK_INT >= 23) {
+                selectedImagePath = ImageFilePath.getPath(getApplication(), uriPhotoResult);
+            } else {
+                selectedImagePath = uriPhotoResult.toString();
+            }
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriPhotoResult);
+                photoConsultora.setImageBitmap(bitmap);
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+
+        } else if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_UPDATE){
+            uriPhotoResult = data.getData();
+
+            if (Build.VERSION.SDK_INT >= 23) {
+                selectedImagePath = ImageFilePath.getPath(getApplication(), uriPhotoResult);
+            } else {
+                selectedImagePath = uriPhotoResult.toString();
+            }
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriPhotoResult);
+                photoConsultora.setImageBitmap(bitmap);
+                if (!UtilsDml.updateImageClient(getApplication(),id,selectedImagePath)){
+                    Toast.makeText(this,getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
             }
         }
     }

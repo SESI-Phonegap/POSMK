@@ -94,6 +94,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 ContractSql.Consultoras.COLIMN_NAME_NOMBRE + " TEXT  , " +
                 ContractSql.Consultoras.COLIMN_NAME_NIVEL + " TEXT  , " +
                 ContractSql.Consultoras.COLIMN_NAME_DIRECCION + " TEXT  , " +
+                ContractSql.Consultoras.COLIMN_NAME_STATUS_UNIDAD + " INTEGER , " +
                 ContractSql.Consultoras.COLIMN_NAME_TELEFONO + " TEXT   );"
         );
 

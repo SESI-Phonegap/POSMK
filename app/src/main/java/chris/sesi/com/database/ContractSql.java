@@ -84,6 +84,7 @@ public final class ContractSql {
        public static final String COLIMN_NAME_NIVEL = "nivel";
        public static final String COLIMN_NAME_TELEFONO = "telefono";
        public static final String COLIMN_NAME_DIRECCION = "direccion";
+       public static final String COLIMN_NAME_STATUS_UNIDAD = "status_unidad";
    }
 
     public static class UnidadConsultora{

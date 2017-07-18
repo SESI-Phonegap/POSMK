@@ -29,19 +29,18 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import chris.sesi.com.model.ModelConsultora;
 import chris.sesi.com.utils.Utils;
 import chris.sesi.com.utils.UtilsDml;
 
 public class ConsultoraList extends AppCompatActivity implements SearchView.OnQueryTextListener{
     public RecyclerView recyclerView;
-    private List<String> items;
-    public static List<String> itemsID;
-    public static List<String> item_tel;
     private TestAdapter testAdapter;
     private final static String ORIGIN_ACTIVITY = "origin_activity";
     private final static String ACTUALIZAR = "actualizar";
     private final static String ALTA = "alta";
     private final static String CONSULTORAS = "consultoras";
+    private List<ModelConsultora> listConsultora;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +51,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
     }
 
     public void init(){
+        listConsultora = new ArrayList<>();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -66,16 +66,13 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
             }
         });
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_consultoras);
-        items = new ArrayList<>();
-        itemsID = new ArrayList<>();
-        item_tel = new ArrayList<>();
-        UtilsDml.consultaConsultoras(getApplication(),items,item_tel,itemsID);
+        UtilsDml.consultaConsultoras(getApplication(),listConsultora);
         setUpRecyclerView();
 
     }
 
     public void setUpRecyclerView() {
-        testAdapter = new TestAdapter(items, this);
+        testAdapter = new TestAdapter(listConsultora, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(testAdapter);
         recyclerView.setHasFixedSize(true);
@@ -92,11 +89,11 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
     @Override
     public boolean onQueryTextChange(String newText) {
         newText = newText.toLowerCase();
-        final List<String> filteredList = new ArrayList<>();
-        for (int i = 0; i < items.size(); i++) {
-            final String text = items.get(i).toLowerCase();
-            if (text.contains(newText)) {
-                filteredList.add(items.get(i));
+        final List<ModelConsultora> filteredList = new ArrayList<>();
+        for (int i = 0; i < listConsultora.size(); i++) {
+            final String modelConsultoraNombre = listConsultora.get(i).getNombre();
+            if (modelConsultoraNombre.contains(newText)) {
+                filteredList.add(listConsultora.get(i));
             }
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(ConsultoraList.this));
@@ -124,15 +121,15 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
 
         private static final int PENDING_REMOVAL_TIMEOUT = 3000; // 3sec
 
-        List<String> items;
+        List<ModelConsultora> items;
         Context mContext;
-        List<String> itemsPendingRemoval;
+        List<ModelConsultora> itemsPendingRemoval;
         int lastInsertedIndex; // so we can add some more items for testing purposes
         boolean undoOn; // is undo on, you can turn it on from the toolbar menu
 
         private Handler handler = new Handler(); // hanlder for running delayed runnables
 
-        private TestAdapter(List<String> item, Context context) {
+        private TestAdapter(List<ModelConsultora> item, Context context) {
 
             items = item;
             mContext = context;
@@ -150,9 +147,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             TestViewHolder viewHolder = (TestViewHolder) holder;
-            final String item = items.get(position);
-            final String item_telefono = item_tel.get(position);
-            final String item_Id = itemsID.get(position);
+            final ModelConsultora item = items.get(position);
 
             if (itemsPendingRemoval.contains(item)) {
                 // we need to show the "undo" state of the row
@@ -164,24 +159,48 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
 
             } else {
                 // we need to show the "normal" state
+                final String idUnidad = UtilsDml.consultaUnidad(getApplication());
+                if (!idUnidad.equals("")) {
+                    viewHolder.imgAddUnidad.setVisibility(View.VISIBLE);
+                    viewHolder.imgAddUnidad.setEnabled(true);
+                    viewHolder.imgAddUnidad.setClickable(true);
+
+                    if (item.getStatus_unidad() == 1) {
+                        viewHolder.imgAddUnidad.setImageResource(R.drawable.ic_star_blue_48dp);
+                    } else {
+                        viewHolder.imgAddUnidad.setImageResource(R.drawable.ic_star_outline_blue_48dp);
+                    }
+
+                    viewHolder.imgAddUnidad.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UtilsDml.addConsultoraUnidad(getApplication(), item.getId(), idUnidad);
+                        }
+                    });
+
+                } else {
+                    viewHolder.imgAddUnidad.setVisibility(View.INVISIBLE);
+                    viewHolder.imgAddUnidad.setEnabled(false);
+                    viewHolder.imgAddUnidad.setClickable(false);
+                }
+
                 viewHolder.itemView.setBackgroundColor(Color.WHITE);
                 viewHolder.titleTextView.setVisibility(View.VISIBLE);
                 viewHolder.imageView.setVisibility(View.VISIBLE);
                 viewHolder.telefonoTextView.setVisibility(View.VISIBLE);
                 viewHolder.imageView.setImageResource(R.drawable.ic_person_black_24dp);
-                viewHolder.titleTextView.setText(item);
-                viewHolder.telefonoTextView.setText(item_telefono);
+                viewHolder.titleTextView.setText(item.getNombre());
+                viewHolder.telefonoTextView.setText(item.getTelefono());
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, FormNuevaConsultora.class);
-                        intent.putExtra("ID", item_Id);
+                        intent.putExtra("ID", item.getId());
                         intent.putExtra(ORIGIN_ACTIVITY,ACTUALIZAR);
                         context.startActivity(intent);
                     }
                 });
-
 
             }
         }
@@ -201,7 +220,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
 
 
         public void llamar(int position) {
-            final String itemTel = item_tel.get(position);
+            final String itemTel = listConsultora.get(position).getTelefono();
 
             try {
                 if (ActivityCompat.checkSelfPermission(ConsultoraList.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -241,7 +260,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
 
 
         public void remove(int position) {
-            String item = items.get(position);
+            ModelConsultora item = items.get(position);
             if (itemsPendingRemoval.contains(item)) {
                 itemsPendingRemoval.remove(item);
             }
@@ -252,7 +271,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
         }
 
         public boolean isPendingRemoval(int position) {
-            String item = items.get(position);
+            ModelConsultora item = items.get(position);
             return itemsPendingRemoval.contains(item);
         }
     }
@@ -267,6 +286,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
         View mView;
         ImageView imageView;
         TextView telefonoTextView;
+        ImageView imgAddUnidad;
 
         TestViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view, parent, false));
@@ -274,6 +294,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
             //  undoButton = (Button) itemView.findViewById(R.id.undo_button);
             imageView = (ImageView) itemView.findViewById(R.id.list_avatar_clienta);
             telefonoTextView = (TextView) itemView.findViewById(R.id.cliente_tel);
+            imgAddUnidad = (ImageView) itemView.findViewById(R.id.addConsultora);
             mView = itemView;
         }
 
