@@ -88,7 +88,7 @@ public class FormAgregarStock extends AppCompatActivity {
 
         } else {
 
-            if (Uri.parse(item_photo) != null) {
+            if (null != Uri.parse(item_photo)) {
                 if (Uri.parse(item_photo).toString().equals("")) {
                     photoProduct.setImageResource(R.drawable.ni_image);
                 } else {

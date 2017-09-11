@@ -2,8 +2,10 @@ package chris.sesi.com.minegociomk;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -11,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -32,9 +35,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
+import chris.sesi.com.model.ModelUser;
 import chris.sesi.com.utils.ImageFilePath;
 import chris.sesi.com.utils.Utils;
 import chris.sesi.com.utils.UtilsDml;
@@ -148,14 +156,53 @@ public class MenuPrincipal extends AppCompatActivity
                 ActivityCompat.requestPermissions(MenuPrincipal.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 999);
 
             } else {
-                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(gallery, PICK_IMAGE);
+                /*Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(gallery, PICK_IMAGE);*/
+                galleryFilter(PICK_IMAGE);
             }
         }else {
-            Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            startActivityForResult(gallery, PICK_IMAGE);
+            /*Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(gallery, PICK_IMAGE);*/
+            galleryFilter(PICK_IMAGE);
         }
 
+    }
+    public void galleryFilter(int code){
+        List<Intent> targetGalleryIntents = new ArrayList<>();
+        Intent galleryIntent = new Intent();
+        galleryIntent.setAction(Intent.ACTION_PICK);
+        galleryIntent.setType("image/*");
+        PackageManager pm = getApplicationContext().getPackageManager();
+        List<ResolveInfo> resInfos = pm.queryIntentActivities(galleryIntent,0);
+        if (!resInfos.isEmpty()){
+            for (ResolveInfo resInfo : resInfos){
+                String packageName = resInfo.activityInfo.packageName;
+
+                if (!packageName.contains("com.google.android.apps.photos") && !packageName.equals("com.google.android.apps.plus")){
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName(packageName, resInfo.activityInfo.name));
+                    intent.putExtra("AppName", resInfo.loadLabel(pm).toString());
+                    intent.setAction(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    intent.setPackage(packageName);
+                    targetGalleryIntents.add(intent);
+                }
+            }
+
+            if (!targetGalleryIntents.isEmpty()){
+                Collections.sort(targetGalleryIntents, new Comparator<Intent>() {
+                    @Override
+                    public int compare(Intent o1, Intent o2) {
+                        return o1.getStringExtra("AppName").compareTo(o2.getStringExtra("AppName"));
+                    }
+                });
+                Intent chooserIntent = Intent.createChooser(targetGalleryIntents.remove(0), "Abrir Galeria");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetGalleryIntents.toArray(new Parcelable[]{}));
+                startActivityForResult(chooserIntent,PICK_IMAGE);
+            } else {
+                Toast.makeText(getApplicationContext(),"No se encontro la galeria",Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
@@ -334,29 +381,29 @@ public class MenuPrincipal extends AppCompatActivity
     }
 
     public void updateData(){
-        String[] result = new String[4];
-        if (UtilsDml.obtenerUsuario(getApplication(),result)){
-            _idEmail = (result[0]);
-            nav_email.setText(result[0]);
-            nav_user_name.setText(result[1]);
-            nav_user_category.setText(result[2]);
+        ModelUser user = UtilsDml.obtenerUsuario(getApplication());
+        if (null != user){
+            _idEmail = (user.getIdEmail());
+            nav_email.setText(user.getIdEmail());
+            nav_user_name.setText(user.getNombre());
+            nav_user_category.setText(user.getNivelMk());
 
             if (Build.VERSION.SDK_INT >= 23){
 
-                    if (result[3].equals("")) {
+                    if (user.getSrcPhoto().equals("")) {
                         circleImageViewUser.setImageResource(R.drawable.femeie);
                     } else {
-                        Bitmap bitmap = BitmapFactory.decodeFile(result[3]);
+                        Bitmap bitmap = BitmapFactory.decodeFile(user.getSrcPhoto());
                         circleImageViewUser.setImageBitmap(bitmap);
                     }
 
             } else {
-                if (Uri.parse(result[3]) != null) {
-                    if (Uri.parse(result[3]).toString().equals("")) {
+                if (null != Uri.parse(user.getSrcPhoto())) {
+                    if (Uri.parse(user.getSrcPhoto()).toString().equals("")) {
                         circleImageViewUser.setImageResource(R.drawable.femeie);
                     } else {
                         try {
-                              Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(result[3]));
+                              Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(user.getSrcPhoto()));
                               circleImageViewUser.setImageBitmap(bitmap);
                             //    circleImageViewUser.setImageURI(Uri.parse(result[3]));
                         } catch (IOException e) {
@@ -365,6 +412,10 @@ public class MenuPrincipal extends AppCompatActivity
                     }
                 }
             }
+        } else {
+            Toast.makeText(this, getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
     }
 

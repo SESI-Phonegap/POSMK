@@ -7,6 +7,7 @@
     <string name="registrate"><u>Regístrate</u></string>
     <string name="iniciaSesion">Iniciar Sesión</string>
     <string name="descripLogo">Logo</string>
+    <string name="guardarSesion">Guardar Sesión</string>
 
     <!-- Registro -->
     <string name="userMkOpcional">Usuario Mary Kay (Opcional)</string>

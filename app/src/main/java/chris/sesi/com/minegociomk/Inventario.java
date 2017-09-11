@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import chris.sesi.com.utils.Constants;
 import chris.sesi.com.utils.UtilsDml;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -184,6 +185,7 @@ public class Inventario extends AppCompatActivity implements SearchView.OnQueryT
                     intent.putExtra("ID_Product", item_Id);
                     intent.putExtra("item_Name", item);
                     intent.putExtra("item_photo", item_photo);
+                    intent.putExtra(Constants.ORIGIN_ACTIVITY,Constants.ACTUALIZAR);
                     context.startActivity(intent);
                 }
             });

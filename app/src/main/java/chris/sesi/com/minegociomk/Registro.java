@@ -74,7 +74,7 @@ public class Registro extends AppCompatActivity {
 
                 Toast.makeText(this, getString(R.string.RegistroExitoso), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
-                startActivityForResult(intent, 0);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
             }

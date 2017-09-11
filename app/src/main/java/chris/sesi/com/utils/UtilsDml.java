@@ -10,8 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,10 +17,10 @@ import java.util.List;
 
 import chris.sesi.com.database.AdminSQLiteOpenHelper;
 import chris.sesi.com.database.ContractSql;
-import chris.sesi.com.minegociomk.MainActivity;
 import chris.sesi.com.minegociomk.MenuPrincipal;
 import chris.sesi.com.minegociomk.R;
 import chris.sesi.com.model.ModelConsultora;
+import chris.sesi.com.model.ModelUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -68,7 +66,7 @@ public class UtilsDml {
         return bIsOk;
     }
 
-    public static boolean iniciarSesion(Application context, View view, String user, String pass) {
+    public static boolean iniciarSesion(Application context, String user, String pass) {
         boolean bIsOk = false;
         // String passUser, idEmail;
 
@@ -111,9 +109,8 @@ public class UtilsDml {
         return bIsOk;
     }
 
-    public static boolean obtenerUsuario(Application context, String[] data) {
-
-        boolean bIsOk = false;
+    public static ModelUser obtenerUsuario(Application context) {
+        ModelUser user;
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
         SQLiteDatabase db = adminSQLiteOpenHelper.getReadableDatabase();
 
@@ -121,6 +118,9 @@ public class UtilsDml {
         String[] projection = {ContractSql.User.COLUMN_NAME_PK_ID,
                 ContractSql.User.COLUMN_NAME_NOMBRE,
                 ContractSql.User.COLUMN_NAME_NIVELMK,
+                ContractSql.User.COLUMN_NAME_PASS_USER,
+                ContractSql.User.COLUMN_NAME_USER_MK,
+                ContractSql.User.COLUMN_NAME_PASS_MK,
                 ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER};
         //Filtro del query WHERE
         String selection = "";
@@ -136,21 +136,25 @@ public class UtilsDml {
                 null);
 
         if (cursor.moveToFirst()) {
-            bIsOk = true;
-            data[0] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PK_ID));
-            data[1] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NOMBRE));
-            data[2] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NIVELMK));
-            data[3] = cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER));
+            user = new ModelUser(
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PK_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NOMBRE)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_NIVELMK)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PASS_USER)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_USER_MK)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_PASS_MK)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.User.COLUMN_NAME_SRC_IMAGEUSER)));
+
+            cursor.close();
+            db.close();
+            return user;
 
         } else {
-            Toast.makeText(context, context.getString(R.string.errorRegistro), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, MainActivity.class);
-            context.startActivity(intent);
+            cursor.close();
+            db.close();
+            return null;
         }
-        cursor.close();
-        db.close();
 
-        return bIsOk;
     }
 
     public static boolean obtenerUsuarioForProfile(Application context, String[] data) {
@@ -452,16 +456,16 @@ public class UtilsDml {
                     if (cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NIVEL)).equals("")){
                         photo.setImageResource(R.drawable.femeie);
                     } else {
-                        Bitmap bitmap = BitmapFactory.decodeFile(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NIVEL)));
+                        Bitmap bitmap = BitmapFactory.decodeFile(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA)));
                         photo.setImageBitmap(bitmap);
                     }
 
                 } else {
-                    if (Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NIVEL))) != null){
-                        if (Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NIVEL))).toString().equals("")){
+                    if (Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA))) != null){
+                        if (Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA))).toString().equals("")){
                             photo.setImageResource(R.drawable.femeie);
                         } else {
-                            photo.setImageURI(Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NIVEL))));
+                            photo.setImageURI(Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA))));
                         }
                     }
                 }

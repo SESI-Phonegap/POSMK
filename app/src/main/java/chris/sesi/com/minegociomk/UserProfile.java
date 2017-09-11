@@ -1,13 +1,16 @@
 package chris.sesi.com.minegociomk;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +23,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import chris.sesi.com.utils.ImageFilePath;
 import chris.sesi.com.utils.UtilsDml;
@@ -126,12 +133,14 @@ public class UserProfile extends AppCompatActivity {
                 ActivityCompat.requestPermissions(UserProfile.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 999);
 
             } else {
-                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(gallery, PICK_IMAGE);
+                /*Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(gallery, PICK_IMAGE);*/
+                galleryFilter(PICK_IMAGE);
             }
         }else {
-            Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            startActivityForResult(gallery, PICK_IMAGE);
+            /*Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(gallery, PICK_IMAGE);*/
+            galleryFilter(PICK_IMAGE);
         }
 
     }
@@ -143,6 +152,44 @@ public class UserProfile extends AppCompatActivity {
             //  Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
             //resume tasks needing this permission
             openGallery();
+        }
+    }
+
+    public void galleryFilter(int code){
+        List<Intent> targetGalleryIntents = new ArrayList<>();
+        Intent galleryIntent = new Intent();
+        galleryIntent.setAction(Intent.ACTION_PICK);
+        galleryIntent.setType("image/*");
+        PackageManager pm = getApplicationContext().getPackageManager();
+        List<ResolveInfo> resInfos = pm.queryIntentActivities(galleryIntent,0);
+        if (!resInfos.isEmpty()){
+            for (ResolveInfo resInfo : resInfos){
+                String packageName = resInfo.activityInfo.packageName;
+
+                if (!packageName.contains("com.google.android.apps.photos") && !packageName.equals("com.google.android.apps.plus")){
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName(packageName, resInfo.activityInfo.name));
+                    intent.putExtra("AppName", resInfo.loadLabel(pm).toString());
+                    intent.setAction(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    intent.setPackage(packageName);
+                    targetGalleryIntents.add(intent);
+                }
+            }
+
+            if (!targetGalleryIntents.isEmpty()){
+                Collections.sort(targetGalleryIntents, new Comparator<Intent>() {
+                    @Override
+                    public int compare(Intent o1, Intent o2) {
+                        return o1.getStringExtra("AppName").compareTo(o2.getStringExtra("AppName"));
+                    }
+                });
+                Intent chooserIntent = Intent.createChooser(targetGalleryIntents.remove(0), "Abrir Galeria");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetGalleryIntents.toArray(new Parcelable[]{}));
+                startActivityForResult(chooserIntent,PICK_IMAGE);
+            } else {
+                Toast.makeText(getApplicationContext(),"No se encontro la galeria",Toast.LENGTH_LONG).show();
+            }
         }
     }
 
