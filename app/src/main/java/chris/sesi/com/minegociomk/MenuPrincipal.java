@@ -99,14 +99,14 @@ public class MenuPrincipal extends AppCompatActivity
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), FormNuevoCliente.class);
                 intent.putExtra(ORIGIN_ACTIVITY, ALTA);
-                startActivityForResult(intent, 0);
+                startActivity(intent);
             }
         });
         fabVender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(fabVender.getContext(), Venta.class);
-                startActivityForResult(intent, 0);
+                startActivity(intent);
             }
         });
 

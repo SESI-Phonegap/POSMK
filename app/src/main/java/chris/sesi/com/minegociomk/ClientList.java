@@ -25,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -224,7 +223,7 @@ public class ClientList extends AppCompatActivity implements SearchView.OnQueryT
             return items.size();
         }
 
-        public void setUndoOn(boolean undoOn) {
+        private void setUndoOn(boolean undoOn) {
             this.undoOn = undoOn;
         }
 

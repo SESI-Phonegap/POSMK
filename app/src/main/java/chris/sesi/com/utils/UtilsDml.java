@@ -653,12 +653,12 @@ public class UtilsDml {
                 ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA,
                 ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_PK_ID,
                 ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_STATUS_UNIDAD,
-                ContractSql.Unidad.TABLE_NAME + "." + ContractSql.Unidad.COLIMN_NAME_PK_ID};
+                ContractSql.UnidadConsultora.TABLE_NAME + "." + ContractSql.UnidadConsultora.COLIMN_NAME_FK_ID_UNIDAD_MK};
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(ContractSql.Consultoras.TABLE_NAME + " INNER JOIN " + ContractSql.Unidad.TABLE_NAME + " ON " +
+        queryBuilder.setTables(ContractSql.Consultoras.TABLE_NAME + " INNER JOIN " + ContractSql.UnidadConsultora.TABLE_NAME + " ON " +
                 ContractSql.Consultoras.TABLE_NAME + "." + ContractSql.Consultoras.COLIMN_NAME_PK_ID + " = " +
-                ContractSql.Unidad.TABLE_NAME + "." + ContractSql.Unidad.COLIMN_NAME_PK_ID);
+                ContractSql.UnidadConsultora.TABLE_NAME + "." + ContractSql.UnidadConsultora.COLIMN_NAME_FK_ID_CONSULTORA);
 
 
         //Filtro del query WHERE
@@ -684,7 +684,6 @@ public class UtilsDml {
                 null);
 */
         if (cursor.moveToFirst()) {
-            //Recorremos el cursor hasta que no haya más registros
             bIsOk = true;
             do {
                 items.add(new ModelConsultora(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_PK_ID)),

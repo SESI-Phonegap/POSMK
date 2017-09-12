@@ -55,7 +55,7 @@ public class MiUnidad extends AppCompatActivity {
             if (UtilsDml.consultaMiUnidad(getApplication(),listConsultoras)){
                 setUpRecyclerView();
             } else {
-                Toast.makeText(this,getString(R.string.sinConsultorasUnidad),Toast.LENGTH_LONG);
+                Toast.makeText(this,getString(R.string.sinConsultorasUnidad),Toast.LENGTH_LONG).show();
             }
         } else {
             showDialogNuevaUnidad();
