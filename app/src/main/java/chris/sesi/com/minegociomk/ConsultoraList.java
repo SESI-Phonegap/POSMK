@@ -4,8 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +35,7 @@ import java.util.List;
 import chris.sesi.com.model.ModelConsultora;
 import chris.sesi.com.utils.Utils;
 import chris.sesi.com.utils.UtilsDml;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ConsultoraList extends AppCompatActivity implements SearchView.OnQueryTextListener{
     public RecyclerView recyclerView;
@@ -154,7 +158,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
                 viewHolder.itemView.setBackgroundColor(Color.BLUE);
                 viewHolder.titleTextView.setVisibility(View.GONE);
                 viewHolder.telefonoTextView.setVisibility(View.GONE);
-                viewHolder.imageView.setVisibility(View.GONE);
+                viewHolder.photo.setVisibility(View.GONE);
 
 
             } else {
@@ -186,9 +190,28 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
 
                 viewHolder.itemView.setBackgroundColor(Color.WHITE);
                 viewHolder.titleTextView.setVisibility(View.VISIBLE);
-                viewHolder.imageView.setVisibility(View.VISIBLE);
+                viewHolder.photo.setVisibility(View.VISIBLE);
                 viewHolder.telefonoTextView.setVisibility(View.VISIBLE);
-                viewHolder.imageView.setImageResource(R.drawable.ic_person_black_24dp);
+          //      viewHolder.photo.setImageResource(R.drawable.ic_person_black_24dp);
+
+                if (Build.VERSION.SDK_INT >= 23){
+                    if (item.getFoto().equals("")){
+                        viewHolder.photo.setImageResource(R.drawable.femeie);
+                    } else {
+                        Bitmap bitmap = BitmapFactory.decodeFile(item.getFoto());
+                        viewHolder.photo.setImageBitmap(bitmap);
+                    }
+
+                } else {
+                    if (Uri.parse(item.getFoto()) != null){
+                        if (Uri.parse(item.getFoto()).toString().equals("")){
+                            viewHolder.photo.setImageResource(R.drawable.femeie);
+                        } else {
+                            viewHolder.photo.setImageURI(Uri.parse(item.getFoto()));
+                        }
+                    }
+                }
+
                 viewHolder.titleTextView.setText(item.getNombre());
                 viewHolder.telefonoTextView.setText(item.getTelefono());
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -284,7 +307,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
 
         TextView titleTextView;
         View mView;
-        ImageView imageView;
+        CircleImageView photo;
         TextView telefonoTextView;
         ImageView imgAddUnidad;
 
@@ -292,7 +315,7 @@ public class ConsultoraList extends AppCompatActivity implements SearchView.OnQu
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view, parent, false));
             titleTextView = (TextView) itemView.findViewById(R.id.clienta);
             //  undoButton = (Button) itemView.findViewById(R.id.undo_button);
-            imageView = (ImageView) itemView.findViewById(R.id.list_avatar_clienta);
+            photo = (CircleImageView) itemView.findViewById(R.id.list_avatar_clienta);
             telefonoTextView = (TextView) itemView.findViewById(R.id.cliente_tel);
             imgAddUnidad = (ImageView) itemView.findViewById(R.id.addConsultora);
             mView = itemView;

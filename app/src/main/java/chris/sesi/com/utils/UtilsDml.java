@@ -385,7 +385,8 @@ public class UtilsDml {
         String[] projection = {ContractSql.Consultoras.COLIMN_NAME_PK_ID,
                 ContractSql.Consultoras.COLIMN_NAME_NOMBRE,
                 ContractSql.Consultoras.COLIMN_NAME_TELEFONO,
-                ContractSql.Consultoras.COLIMN_NAME_STATUS_UNIDAD};
+                ContractSql.Consultoras.COLIMN_NAME_STATUS_UNIDAD,
+                ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA};
         //Filtro del query WHERE
         String selection = "";
         String[] selectionArgs = {};
@@ -404,7 +405,7 @@ public class UtilsDml {
             do {
                 consultoras.add(new ModelConsultora(cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_PK_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_NOMBRE)),
-                        "",
+                        cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_IMG_CONSULTORA)),
                         "",
                         cursor.getString(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_TELEFONO)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(ContractSql.Consultoras.COLIMN_NAME_STATUS_UNIDAD))));
