@@ -57,7 +57,7 @@
     <string name="Ventaactual">Venta Actual</string>
     <string name="Buscar">Buscar…</string>
     <string name="Stock">Strock: </string>
-    <string name="$">$ </string>
+    <string name="simbol_moneda">$ </string>
     <string name="Productoagregado">¡ Producto Agregado !</string>
     <string name="Cobrar">Cobrar   $</string>
     <string name="nuevoCliente">Nuevo Cliente</string>

@@ -404,7 +404,7 @@ public class Venta extends AppCompatActivity {
             final String auxPrecio = model.getPrecio();
 
             final String stock = getResources().getString(R.string.Stock)+ " " + model.getCantidad();
-            final String precio = getResources().getString(R.string.$) + " " + model.getPrecio();
+            final String precio = getResources().getString(R.string.simbol_moneda) + " " + model.getPrecio();
 
 
 
