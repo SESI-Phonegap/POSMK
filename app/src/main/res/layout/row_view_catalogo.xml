@@ -13,7 +13,7 @@
             android:layout_margin="7dp"
             android:layout_width="@dimen/avator_size"
             android:layout_height="@dimen/avator_size"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:scaleType="centerCrop"
             tools:src="@drawable/a_avator" />
 
@@ -26,7 +26,6 @@
             android:layout_gravity="bottom"
 
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <TextView
@@ -39,7 +38,6 @@
             android:textAppearance="?attr/textAppearanceListItem"
             tools:text="Valeria Ahumada Oliver"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/list_icon_catalogo"
             android:layout_toEndOf="@+id/list_icon_catalogo" />
 
     </RelativeLayout>

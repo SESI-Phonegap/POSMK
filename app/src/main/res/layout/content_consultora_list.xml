@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="chris.sesi.com.minegociomk.ConsultoraList"
+    tools:context="chris.sesi.com.view.activity.ConsultoraList"
     tools:showIn="@layout/activity_consultora_list">
 
 

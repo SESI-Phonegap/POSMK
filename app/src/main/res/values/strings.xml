@@ -91,4 +91,14 @@
     <string name="registraUnidad">Registra tu unidad</string>
     <string name="title_activity_mi_unidad">MiUnidad</string>
 
+    <string name="descriptionImage">image</string>
+
+    <string name="prestar">Prestar</string>
+    <string name="abonar">Abonar</string>
+    <string name="vender">Vender</string>
+
+    <string name="topClientes">Top Clientas</string>
+    <string name="producto">Producto</string>
+    <string name="disponible">Disponible: %1$s</string>
+
 </resources>

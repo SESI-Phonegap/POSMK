@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="chris.sesi.com.minegociomk.MiUnidad"
+    tools:context="chris.sesi.com.view.activity.MiUnidad"
     tools:showIn="@layout/activity_mi_unidad">
 
     <android.support.v7.widget.RecyclerView

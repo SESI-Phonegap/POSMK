@@ -9,7 +9,7 @@
         android:id="@+id/dialog_seleccionacliente_edittext_buscar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@android:drawable/ic_menu_search"
+        android:drawableStart="@android:drawable/ic_menu_search"
         android:hint="@string/Buscar"/>
 
     <android.support.v7.widget.RecyclerView

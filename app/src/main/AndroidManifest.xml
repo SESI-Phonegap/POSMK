@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="chris.sesi.com.minegociomk">
+    package="chris.sesi.com.view">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -13,9 +13,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity
-            android:name=".MainActivity"
+            android:name="chris.sesi.com.view.activity.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
@@ -25,26 +26,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Registro"
+            android:name="chris.sesi.com.view.activity.Registro"
             android:label="@string/title_activity_registro"
-            android:parentActivityName=".MenuPrincipal"
+            android:parentActivityName="chris.sesi.com.view.activity.MenuPrincipal"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MenuPrincipal" />
+                android:value="chris.sesi.com.view.activity.MenuPrincipal" />
         </activity>
         <activity
-            android:name=".MenuPrincipal"
+            android:name="chris.sesi.com.view.activity.MenuPrincipal"
             android:label="@string/title_activity_menu_principal"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".FormNuevoCliente"
+            android:name="chris.sesi.com.view.activity.FormNuevoCliente"
             android:label="@string/title_activity_form_nuevo_cliente"
-            android:parentActivityName=".MenuPrincipal"
+            android:parentActivityName="chris.sesi.com.view.activity.MenuPrincipal"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden">
@@ -52,82 +53,82 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MenuPrincipal" />
+                android:value="chris.sesi.com.view.activity.MenuPrincipal" />
         </activity>
         <activity
-            android:name=".ClientList"
+            android:name="chris.sesi.com.view.activity.ClientList"
             android:label="@string/title_activity_client_list"
-            android:parentActivityName=".MenuPrincipal"
+            android:parentActivityName="chris.sesi.com.view.activity.MenuPrincipal"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MenuPrincipal" />
+                android:value="chris.sesi.com.view.activity.MenuPrincipal" />
         </activity>
 
         <activity
-            android:name=".Catalogo"
+            android:name="chris.sesi.com.view.activity.Catalogo"
             android:label="@string/title_activity_catalogo"
-            android:parentActivityName=".MenuPrincipal"
+            android:parentActivityName="chris.sesi.com.view.activity.MenuPrincipal"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MenuPrincipal" />
+                android:value="chris.sesi.com.view.activity.MenuPrincipal" />
         </activity>
         <activity
-            android:name=".Inventario"
+            android:name="chris.sesi.com.view.activity.Inventario"
             android:label="@string/title_activity_inventario"
-            android:parentActivityName=".MenuPrincipal"
+            android:parentActivityName="chris.sesi.com.view.activity.MenuPrincipal"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MenuPrincipal" />
+                android:value="chris.sesi.com.view.activity.MenuPrincipal" />
         </activity>
         <activity
-            android:name=".FormAgregarStock"
+            android:name="chris.sesi.com.view.activity.FormAgregarStock"
             android:label="@string/title_activity_form_agregar_stock"
-            android:parentActivityName=".Inventario"
+            android:parentActivityName="chris.sesi.com.view.activity.Inventario"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Inventario" />
+                android:value="chris.sesi.com.view.activity.Inventario" />
         </activity>
         <activity
-            android:name=".Venta"
+            android:name="chris.sesi.com.view.activity.Venta"
             android:label="@string/title_activity_venta"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".FormNuevaConsultora"
+            android:name="chris.sesi.com.view.activity.FormNuevaConsultora"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".ConsultoraList"
+            android:name="chris.sesi.com.view.activity.ConsultoraList"
             android:label="@string/title_activity_consultora_list"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MenuPrincipal" />
+                android:value="chris.sesi.com.view.activity.MenuPrincipal" />
         </activity>
         <activity
-            android:name=".UserProfile"
+            android:name="chris.sesi.com.view.activity.UserProfile"
             android:label="@string/title_activity_user_profile"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".MiUnidad"
+            android:name="chris.sesi.com.view.activity.MiUnidad"
             android:label="@string/title_activity_mi_unidad"
             android:theme="@style/AppTheme"></activity>
     </application>

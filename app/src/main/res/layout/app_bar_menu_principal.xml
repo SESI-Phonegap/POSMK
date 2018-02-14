@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="chris.sesi.com.minegociomk.MenuPrincipal">
+    tools:context="chris.sesi.com.view.activity.MenuPrincipal">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         android:id="@+id/fabLayoutNcliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/standard_23"
+        android:layout_marginEnd="@dimen/standard_23"
         android:padding="@dimen/standard_12"
         android:clipToPadding="false"
         android:gravity="center_vertical"
@@ -39,13 +39,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/negro"
-            android:text="Nuevo Cliente"/>
+            android:text="@string/nuevoCliente"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabNuevoCliente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             app:srcCompat="@drawable/ic_person_add_white_24dp"
             app:fabSize="mini"/>
     </LinearLayout>
@@ -53,7 +53,7 @@
         android:id="@+id/fabLayoutPrestar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/standard_23"
+        android:layout_marginEnd="@dimen/standard_23"
         android:padding="@dimen/standard_12"
         android:clipToPadding="false"
         android:gravity="center_vertical"
@@ -65,13 +65,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/negro"
-            android:text="Prestar"/>
+            android:text="@string/prestar"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabPrestar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             app:srcCompat="@drawable/ic_cached_white_24dp"
             app:fabSize="mini"/>
     </LinearLayout>
@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/standard_12"
         android:clipToPadding="false"
-        android:layout_marginRight="@dimen/standard_23"
+        android:layout_marginEnd="@dimen/standard_23"
         android:gravity="center_vertical"
         android:layout_marginBottom="@dimen/standard_23"
         android:layout_gravity="bottom|end"
@@ -92,13 +92,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/negro"
-            android:text="Abonar"/>
+            android:text="@string/abonar"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabAbono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             app:srcCompat="@drawable/ic_local_atm_white_24dp"
             app:fabSize="mini"/>
     </LinearLayout>
@@ -110,7 +110,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/standard_12"
         android:clipToPadding="false"
-        android:layout_marginRight="@dimen/standard_23"
+        android:layout_marginEnd="@dimen/standard_23"
         android:gravity="center_vertical"
         android:layout_marginBottom="@dimen/standard_23"
         android:layout_gravity="bottom|end"
@@ -120,13 +120,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/negro"
-            android:text="Vender"/>
+            android:text="@string/vender"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabVender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             app:srcCompat="@drawable/ic_attach_money_white_24dp"
             android:tint="@android:color/white"
             app:fabSize="mini"/>
@@ -136,7 +136,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:gravity="center_vertical"
         android:clipToPadding="false"
         android:padding="@dimen/standard_12"
